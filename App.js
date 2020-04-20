@@ -123,7 +123,7 @@ class CodingScreen extends React.Component{
          height: 225,
      width : 225,
      marginVertical:300,
-     bottom:50
+     bottom:100
       }
     }
         javaScriptEnabled={true}
