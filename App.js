@@ -118,14 +118,19 @@ class CodingScreen extends React.Component{
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <WebView
-      style={{ height: 100,
-     width : 100,
+      style={{
+
+         height: 200,
+     width : 200,
+     marginVertical:300,
+     bottom:200
       }
     }
         javaScriptEnabled={true}
         startInLoadingState={true}
+
         domStorageEnabled={true}
-        source={{ uri: 'https://www.youtube.com/watch?v=UMKWijxv0kE' }}
+        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
 
       />
       </View>
