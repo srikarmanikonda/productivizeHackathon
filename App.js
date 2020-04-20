@@ -4,6 +4,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Icon, Content } from 'native-base';
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
+import { WebView } from 'react-native-webview';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -23,7 +24,7 @@ class HomeScreen extends React.Component {
       this.setState({[x]: true});
     } else {
       this.setState({[x]: false});
-    } 
+    }
   }
 
   render() {
@@ -32,12 +33,12 @@ class HomeScreen extends React.Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
           <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
-      
+
         <Card>
 
           <CardItem header style={{width: 300}}>
             <Text>Welcome! Productivize is designed to help you make the best use
-               of your time in the weird current world we're living in. Select some 
+               of your time in the weird current world we're living in. Select some
                skills you would like to learn to get started!</Text>
           </CardItem>
 
@@ -85,14 +86,14 @@ class HomeScreen extends React.Component {
           <View style={{marginVertical:5}}></View>
 
         </Card>
-        
+
         <View style={{marginVertical:20}}></View>
 
-        <AdvButton text="Advance!" onPress={() => navigate('Profile')}/>
+        <AdvButton text="Advance!" onPress={() => navigate('Coding')}/>
 
       </View>
     );
-  } 
+  }
 }
 
 class ProfileScreen extends React.Component {
@@ -108,6 +109,35 @@ class ProfileScreen extends React.Component {
     );
     }
 }
+class CodingScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Coding'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <WebView
+      style={{
+
+         height: 225,
+     width : 225,
+     marginVertical:300,
+     bottom:100
+      }
+    }
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
+
+      />
+      </View>
+    );
+    }
+
+}
 
 const AppNavigator = createSwitchNavigator({
   Home: {
@@ -115,7 +145,10 @@ const AppNavigator = createSwitchNavigator({
   },
   Profile: {
     screen: ProfileScreen
-  }
+  },
+  Coding:{
+    screen:CodingScreen
+  },
 });
 
 export default createAppContainer(AppNavigator);
