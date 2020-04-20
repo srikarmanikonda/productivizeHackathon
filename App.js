@@ -138,6 +138,70 @@ class CodingScreen extends React.Component{
     }
 
 }
+class CookingScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Cooking'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Instrument extends React.Component{
+  static navigationOptions  = {
+    title:'Instrumentplaying'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is instrument...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Lenguage extends React.Component{
+  static navigationOptions  = {
+    title:'Language'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is learning a language screen...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Acheivementscreen extends React.Component{
+  static navigationOptions  = {
+    title:'Acheivement'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
 
 const AppNavigator = createSwitchNavigator({
   Home: {
@@ -149,6 +213,21 @@ const AppNavigator = createSwitchNavigator({
   Coding:{
     screen:CodingScreen
   },
+  Cooking:{
+    screen:CookingScreen
+  },
+  Instrumentplaying:{
+    screen:Instrument
+  },
+  Language:{
+    screen:Lenguage
+  },
+  Acheivement:{
+    screen:Acheivementscreen
+  }
+
+
+
 });
 
 export default createAppContainer(AppNavigator);
