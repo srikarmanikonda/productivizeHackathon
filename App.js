@@ -89,7 +89,7 @@ class HomeScreen extends React.Component {
 
         <View style={{marginVertical:20}}></View>
 
-        <AdvButton text="Advance!" onPress={() => navigate('Coding')}/>
+        <AdvButton text="Advance!" onPress={() => navigate('Home')}/>
 
       </View>
     );
