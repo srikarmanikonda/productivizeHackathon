@@ -120,10 +120,10 @@ class CodingScreen extends React.Component{
       <WebView
       style={{
 
-         height: 200,
-     width : 200,
+         height: 225,
+     width : 225,
      marginVertical:300,
-     bottom:200
+     bottom:100
       }
     }
         javaScriptEnabled={true}
