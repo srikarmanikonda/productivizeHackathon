@@ -1,23 +1,39 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TextInput} from 'react-native';
+import { Platform, View, Text, StyleSheet, ActivityIndicator, TextInput, Picker, Alert, YellowBox} from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Icon, Content } from 'native-base';
+import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Content } from 'native-base';
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
+import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
+import { AntDesign } from 'react-native-vector-icons';
 import { WebView } from 'react-native-webview';
+//nothing is global!!!! so make variables
+//same "principles" often apply...
+
+var usersChoice;
+var wantCoding;
+var wantCooking;
+var wantInstrument;
+var wantLanguage;
+var wantOther;
+
 
 class HomeScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      one:false,
+      two:false,
+      three:false,
+      four:false,
+      five:false,
+      TextInputValue: ''
+    }
+  }
+
   static navigationOptions = {
     title: 'Home',
   };
-
-  state={
-    one:false,
-    two:false,
-    three:false,
-    four:false,
-    five:false,
-  }
 
   whichPressed(x){
     if (this.state[x] == false){
@@ -27,8 +43,21 @@ class HomeScreen extends React.Component {
     }
   }
 
+  gettingWhatUserTyped(){
+    usersChoice = this.state.TextInputValue
+  }
+
+  gettingStatesOfCheckboxes(){
+    wantCoding=this.state.one;
+    wantCooking=this.state.two;
+    wantInstrument=this.state.three;
+    wantLanguage=this.state.four;
+    wantOther=this.state.five;
+  }
+
   render() {
     const {navigate} = this.props.navigation;
+
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
@@ -80,7 +109,7 @@ class HomeScreen extends React.Component {
             style={{marginRight:20}}
             />
             <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:200}}
-            placeholder= 'Other: enter another activity!'/>
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue=>this.setState({TextInputValue})}/>
           </CardItem>
 
           <View style={{marginVertical:5}}></View>
@@ -89,22 +118,91 @@ class HomeScreen extends React.Component {
 
         <View style={{marginVertical:20}}></View>
 
+        <AdvButton text="Advance!" onPress={() => {
+
+          if (this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true){
+            navigate('Next');
+          }
+
+          this.gettingWhatUserTyped();
+
+          this.gettingStatesOfCheckboxes();
+
+        }}/>
+
         <AdvButton text="Advance!" onPress={() => navigate('Home')}/>
+
 
       </View>
     );
   }
 }
 
-class ProfileScreen extends React.Component {
+class SecondScreen extends React.Component {
   static navigationOptions = {
-    title: 'Profile',
+    title: 'Next',
   };
+
   render() {
     const {navigate} = this.props.navigation;
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text onPress={() => navigate('Home')}>Return To Home Screen</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+        <MenuProvider style={{ padding: 30 }}>
+
+        <Menu onSelect={value => alert(`You clicked: ${value}`)}>
+    
+          <MenuTrigger>
+            <Card
+              style={{
+              paddingHorizontal: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              }}>
+
+                <Text style={styles.headerText}>Select an Activity!</Text>
+                <AntDesign name='downcircleo'/>
+
+            </Card>
+          </MenuTrigger >
+              
+          <View style={{alignItems: 'center'}}>
+            <Text style={{paddingVertical: 50}} onPress={() => navigate('Home')}>Return</Text>
+          </View>
+
+        
+
+          <MenuOptions>
+            {wantCoding == true? 
+            <MenuOption value={"Coding"}>
+              <Text style={styles.menuContent}>Coding</Text>
+            </MenuOption>: null}
+
+            {wantCooking == true? 
+            <MenuOption value={"Cooking"}>
+              <Text style={styles.menuContent}>Cooking</Text>
+            </MenuOption>: null}
+
+            {wantInstrument == true? 
+            <MenuOption value={"Playing an Instrument"}>
+              <Text style={styles.menuContent}>Playing an Instrument</Text>
+            </MenuOption>: null}
+
+            {wantLanguage == true? 
+            <MenuOption value={"Learning a Language"}>
+              <Text style={styles.menuContent}>Learning a Language</Text>
+            </MenuOption>: null}
+
+            {wantOther == true? 
+            <MenuOption value={"Other"}>
+              <Text style={styles.menuContent}>{usersChoice}</Text>
+            </MenuOption>: null}
+            
+          </MenuOptions>
+
+        </Menu>
+      </MenuProvider>
+
       </View>
     );
     }
@@ -203,10 +301,24 @@ class Acheivementscreen extends React.Component{
 }
 
 
+const styles = StyleSheet.create({
+  headerText: {
+  fontSize: 15,
+  margin: 10,
+},
+  menuContent: {
+  color: "#000",
+  padding: 2,
+  fontSize: 15
+}
+});
+
 const AppNavigator = createSwitchNavigator({
   Home: {
     screen: HomeScreen
   },
+  Next: {
+    screen: SecondScreen
   Profile: {
     screen: ProfileScreen
   },
@@ -231,3 +343,39 @@ const AppNavigator = createSwitchNavigator({
 });
 
 export default createAppContainer(AppNavigator);
+
+
+
+/*
+if (this.state["one"]==true){
+  desiredItems.push("Coding");
+} else {
+  desiredItems.push("");
+}
+
+if (this.state["two"]==true){
+  desiredItems.push("Cooking");
+} else {
+  desiredItems.push("");
+}
+
+if (this.state["three"]==true){
+  desiredItems.push("Playing an Instrument");
+} else {
+  desiredItems.push("");
+}
+
+if (this.state["four"]==true){
+  desiredItems.push("Learning a Language");
+} else {
+  desiredItems.push("");
+}
+
+if (this.state["five"]==true){
+  desiredItems.push(this.state.TextInputValue);
+}
+else {
+  desiredItems.push("");
+}
+*/
+
