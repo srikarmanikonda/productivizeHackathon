@@ -130,7 +130,6 @@ class HomeScreen extends React.Component {
 
         }}/>
 
-        <AdvButton text="Advance!" onPress={() => navigate('Home')}/>
 
 
       </View>
@@ -149,8 +148,13 @@ class SecondScreen extends React.Component {
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', }}>
         <MenuProvider style={{ padding: 30 }}>
 
-        <Menu onSelect={value => alert(`You clicked: ${value}`)}>
-    
+        <Menu onSelect={value => {
+      if(value == 'Coding'){
+    navigate('Coding')
+  }
+
+}}>
+
           <MenuTrigger>
             <Card
               style={{
@@ -165,39 +169,39 @@ class SecondScreen extends React.Component {
 
             </Card>
           </MenuTrigger >
-              
+
           <View style={{alignItems: 'center'}}>
             <Text style={{paddingVertical: 50}} onPress={() => navigate('Home')}>Return</Text>
           </View>
 
-        
+
 
           <MenuOptions>
-            {wantCoding == true? 
+            {wantCoding == true?
             <MenuOption value={"Coding"}>
               <Text style={styles.menuContent}>Coding</Text>
             </MenuOption>: null}
 
-            {wantCooking == true? 
+            {wantCooking == true?
             <MenuOption value={"Cooking"}>
               <Text style={styles.menuContent}>Cooking</Text>
             </MenuOption>: null}
 
-            {wantInstrument == true? 
+            {wantInstrument == true?
             <MenuOption value={"Playing an Instrument"}>
               <Text style={styles.menuContent}>Playing an Instrument</Text>
             </MenuOption>: null}
 
-            {wantLanguage == true? 
+            {wantLanguage == true?
             <MenuOption value={"Learning a Language"}>
               <Text style={styles.menuContent}>Learning a Language</Text>
             </MenuOption>: null}
 
-            {wantOther == true? 
+            {wantOther == true?
             <MenuOption value={"Other"}>
               <Text style={styles.menuContent}>{usersChoice}</Text>
             </MenuOption>: null}
-            
+
           </MenuOptions>
 
         </Menu>
@@ -319,9 +323,7 @@ const AppNavigator = createSwitchNavigator({
   },
   Next: {
     screen: SecondScreen
-  Profile: {
-    screen: ProfileScreen
-  },
+},
   Coding:{
     screen:CodingScreen
   },
@@ -378,4 +380,3 @@ else {
   desiredItems.push("");
 }
 */
-
