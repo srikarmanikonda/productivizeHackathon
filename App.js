@@ -6,7 +6,7 @@ import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
 import { AntDesign } from 'react-native-vector-icons';
-
+import { WebView } from 'react-native-webview';
 //nothing is global!!!! so make variables
 //same "principles" often apply...
 
@@ -16,6 +16,7 @@ var wantCooking;
 var wantInstrument;
 var wantLanguage;
 var wantOther;
+
 
 class HomeScreen extends React.Component {
   constructor(props){
@@ -39,7 +40,7 @@ class HomeScreen extends React.Component {
       this.setState({[x]: true});
     } else {
       this.setState({[x]: false});
-    } 
+    }
   }
 
   gettingWhatUserTyped(){
@@ -61,12 +62,12 @@ class HomeScreen extends React.Component {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
           <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
-      
+
         <Card>
 
           <CardItem header style={{width: 300}}>
             <Text>Welcome! Productivize is designed to help you make the best use
-               of your time in the weird current world we're living in. Select some 
+               of your time in the weird current world we're living in. Select some
                skills you would like to learn to get started!</Text>
           </CardItem>
 
@@ -114,7 +115,7 @@ class HomeScreen extends React.Component {
           <View style={{marginVertical:5}}></View>
 
         </Card>
-        
+
         <View style={{marginVertical:20}}></View>
 
         <AdvButton text="Advance!" onPress={() => {
@@ -129,9 +130,12 @@ class HomeScreen extends React.Component {
 
         }}/>
 
+        <AdvButton text="Advance!" onPress={() => navigate('Home')}/>
+
+
       </View>
     );
-  } 
+  }
 }
 
 class SecondScreen extends React.Component {
@@ -203,6 +207,99 @@ class SecondScreen extends React.Component {
     );
     }
 }
+class CodingScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Coding'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <WebView
+      style={{
+
+         height: 225,
+     width : 225,
+     marginVertical:300,
+     bottom:100
+      }
+    }
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
+
+      />
+      </View>
+    );
+    }
+
+}
+class CookingScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Cooking'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Instrument extends React.Component{
+  static navigationOptions  = {
+    title:'Instrumentplaying'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is instrument...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Lenguage extends React.Component{
+  static navigationOptions  = {
+    title:'Language'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is learning a language screen...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Acheivementscreen extends React.Component{
+  static navigationOptions  = {
+    title:'Acheivement'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
 
 const styles = StyleSheet.create({
   headerText: {
@@ -222,7 +319,27 @@ const AppNavigator = createSwitchNavigator({
   },
   Next: {
     screen: SecondScreen
+  Profile: {
+    screen: ProfileScreen
+  },
+  Coding:{
+    screen:CodingScreen
+  },
+  Cooking:{
+    screen:CookingScreen
+  },
+  Instrumentplaying:{
+    screen:Instrument
+  },
+  Language:{
+    screen:Lenguage
+  },
+  Acheivement:{
+    screen:Acheivementscreen
   }
+
+
+
 });
 
 export default createAppContainer(AppNavigator);
@@ -261,3 +378,4 @@ else {
   desiredItems.push("");
 }
 */
+
