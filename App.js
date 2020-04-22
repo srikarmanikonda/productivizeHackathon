@@ -31,6 +31,7 @@ let customFonts = {
   'best-font': require('./assets/fonts/Manrope-Light.ttf'),
 };
 
+
 class HomeScreen extends React.Component {
   constructor(props){
     super(props);
@@ -63,7 +64,7 @@ class HomeScreen extends React.Component {
       this.setState({[x]: true});
     } else {
       this.setState({[x]: false});
-    } 
+    }
   }
 
   gettingWhatUserTyped(){
@@ -160,7 +161,7 @@ class HomeScreen extends React.Component {
           <View style={{marginVertical:5}}></View>
 
         </Card>
-        
+
         <View style={{marginVertical:20}}></View>
 
         <AdvButton text="Advance!" onPress={() => {
@@ -177,6 +178,8 @@ class HomeScreen extends React.Component {
           alert('Congratulations on selecting your first activities! Using the navigation sidebar, you can choose whether you want to view your achievements, view your statistics, start an existing activity, or add a completely new activity. Once you click "OK" here, you will be taken to the screen in which you can start one of the activities that you just selected using the dropdown menu. Once you do that, you will be able to start learning that activity, record time doing that activity, or journal about what you are doing. Happy achieving!')
 
         }}/>
+
+
 
       </View>
     );
@@ -261,34 +264,34 @@ class SecondScreen extends React.Component {
             <Text style={{paddingVertical:75, fontSize: 75, fontFamily: 'best-font',width: 300}} onPress={() => navigate('Home')}>Trust the process.</Text>
           </View>: null }
 
-        
+
 
           <MenuOptions>
-            {wantCoding == true? 
+            {wantCoding == true?
             <MenuOption value={"Coding"}>
               <Text style={styles.menuContent}>Coding</Text>
             </MenuOption>: null}
 
-            {wantCooking == true? 
+            {wantCooking == true?
             <MenuOption value={"Cooking"}>
               <Text style={styles.menuContent}>Cooking</Text>
             </MenuOption>: null}
 
-            {wantInstrument == true? 
+            {wantInstrument == true?
             <MenuOption value={"Playing an Instrument"}>
               <Text style={styles.menuContent}>Playing an Instrument</Text>
             </MenuOption>: null}
 
-            {wantLanguage == true? 
+            {wantLanguage == true?
             <MenuOption value={"Learning a Language"}>
               <Text style={styles.menuContent}>Learning a Language</Text>
             </MenuOption>: null}
 
-            {wantOther == true? 
+            {wantOther == true?
             <MenuOption value={"Other"}>
               <Text style={styles.menuContent}>{usersChoice}</Text>
             </MenuOption>: null}
-            
+
           </MenuOptions>
 
         </Menu>
@@ -298,6 +301,99 @@ class SecondScreen extends React.Component {
     );
     }
 }
+class CodingScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Coding'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <WebView
+      style={{
+
+         height: 225,
+     width : 225,
+     marginVertical:300,
+     bottom:100
+      }
+    }
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
+
+      />
+      </View>
+    );
+    }
+
+}
+class CookingScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Cooking'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Instrument extends React.Component{
+  static navigationOptions  = {
+    title:'Instrumentplaying'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is instrument...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Lenguage extends React.Component{
+  static navigationOptions  = {
+    title:'Language'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is learning a language screen...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class Acheivementscreen extends React.Component{
+  static navigationOptions  = {
+    title:'Acheivement'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
 
 class CodingScreen extends React.Component{
   static navigationOptions  = {
@@ -339,10 +435,25 @@ const AppNavigator = createSwitchNavigator({
   },
   Next: {
     screen: SecondScreen
+},
+  Coding:{
+    screen:CodingScreen
   },
-  Coding: {
-    screen: CodingScreen
+  Cooking:{
+    screen:CookingScreen
+  },
+  Instrumentplaying:{
+    screen:Instrument
+  },
+  Language:{
+    screen:Lenguage
+  },
+  Acheivement:{
+    screen:Acheivementscreen
   }
+
+
+
 });
 
 export default createAppContainer(AppNavigator);
