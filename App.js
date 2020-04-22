@@ -301,6 +301,7 @@ class SecondScreen extends React.Component {
     );
     }
 }
+
 class CodingScreen extends React.Component{
   static navigationOptions  = {
     title:'Coding'
@@ -310,14 +311,7 @@ class CodingScreen extends React.Component{
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <WebView
-      style={{
-
-         height: 225,
-     width : 225,
-     marginVertical:300,
-     bottom:100
-      }
-    }
+        style={{height: "22.5%", width: 225, marginVertical: "70%", bottom:"12%" }}
         javaScriptEnabled={true}
         startInLoadingState={true}
 
@@ -330,6 +324,7 @@ class CodingScreen extends React.Component{
     }
 
 }
+
 class CookingScreen extends React.Component{
   static navigationOptions  = {
     title:'Cooking'
@@ -346,9 +341,9 @@ class CookingScreen extends React.Component{
 
 }
 
-class Instrument extends React.Component{
+class InstrumentScreen extends React.Component{
   static navigationOptions  = {
-    title:'Instrumentplaying'
+    title:'Instrument'
   }
   render() {
     const {navigate} = this.props.navigation;
@@ -362,7 +357,7 @@ class Instrument extends React.Component{
 
 }
 
-class Lenguage extends React.Component{
+class LanguageScreen extends React.Component{
   static navigationOptions  = {
     title:'Language'
   }
@@ -378,9 +373,9 @@ class Lenguage extends React.Component{
 
 }
 
-class Acheivementscreen extends React.Component{
+class AchievementScreen extends React.Component{
   static navigationOptions  = {
-    title:'Acheivement'
+    title:'Achievement'
   }
   render() {
     const {navigate} = this.props.navigation;
@@ -390,33 +385,7 @@ class Acheivementscreen extends React.Component{
 
       </View>
     );
-    }
-
-}
-
-
-class CodingScreen extends React.Component{
-  static navigationOptions  = {
-    title:'Coding'
-  }
-  render() {
-    const {navigate} = this.props.navigation;
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    
-      <WebView
-        style={{height: "22.5%", width: 225, marginVertical: "70%", bottom:"12%" }}
-        javaScriptEnabled={true}
-        startInLoadingState={true}
-        domStorageEnabled={true}
-        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
-
-      />
-      </View>
-    );
-    }
-
-}
+  }}
 
 const styles = StyleSheet.create({
   headerText: {
@@ -442,14 +411,14 @@ const AppNavigator = createSwitchNavigator({
   Cooking:{
     screen:CookingScreen
   },
-  Instrumentplaying:{
-    screen:Instrument
+  Instrument:{
+    screen:InstrumentScreen
   },
   Language:{
-    screen:Lenguage
+    screen:LanguageScreen
   },
-  Acheivement:{
-    screen:Acheivementscreen
+  Achievement:{
+    screen:AchievementScreen
   }
 
 
