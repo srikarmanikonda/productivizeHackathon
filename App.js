@@ -1,7 +1,7 @@
 import React, {Component, useState} from 'react';
-import { Platform, View, Text, StyleSheet, ActivityIndicator, TextInput, Picker, Alert, YellowBox} from 'react-native';
+import { Platform, View, Text, StyleSheet, ActivityIndicator, TextInput, Picker, Alert, YellowBox, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Content, Drawer } from 'native-base';
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
@@ -238,13 +238,17 @@ class SecondScreen extends React.Component {
           }
 
           if (value==usersChoice){
-            navigate('Coding')
+            navigate('Other')
           }
 
         }}>
     
           <MenuTrigger>
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', flexDirection:'row',}}>
+
+            <AntDesign name='bars' size={30} onPress={()=> this.props.navigation.openDrawer()} style={{marginRight: '8%',}}/>
+
+            <View style={{alignItems:'center'}}>
             <Card
               style={{
               width: 200,
@@ -260,7 +264,10 @@ class SecondScreen extends React.Component {
 
             </Card>
             </View>
+            </View>
           </MenuTrigger>
+
+
 
           {whichMotivationalMessage==1?
           <View style={{alignItems: 'center', justifyContent: 'center',}}>
@@ -301,7 +308,7 @@ class SecondScreen extends React.Component {
             </MenuOption>: null}
 
             {wantOther == true?
-            <MenuOption value={"Other"}>
+            <MenuOption value={usersChoice}>
               <Text style={styles.menuContent}>{usersChoice}</Text>
             </MenuOption>: null}
 
@@ -427,14 +434,36 @@ const styles = StyleSheet.create({
 }
 });
 
+const CustomDrawerComponent = (props) => (
+  <SafeAreaView style={{flex: 1, backgroundColor: '#eff9e7'}}>
+    <View style={{height:150, backgroundColor: '#eff9e7', alignItems:'center', justifyContent: 'center'}}>
+      <Image source={require('./assets/splash.png')} style={{height: 120, width: 120}}/>
+    </View>
+    <ScrollView>
+      <DrawerItems {...props}/>
+    </ScrollView>
+  </SafeAreaView>
+)
+
 const DrawerNavigator = createDrawerNavigator({
   Next: {
     screen: SecondScreen
   },
   Achievement: {
     screen: AchievementScreen
-  }
-})
+  },
+
+}, {
+  contentComponent: CustomDrawerComponent,
+  contentOptions: {
+    labelStyle: {
+      fontFamily: 'best-font',
+      fontWeight: 'normal',
+      fontSize: 15,
+    },
+  },
+}
+)
 
 const AppNavigator = createSwitchNavigator({
   Home: {
