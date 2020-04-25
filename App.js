@@ -111,12 +111,12 @@ class HomeScreen extends React.Component {
           ))}
 
           <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
-      
+
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
             <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Welcome! Productivize is designed to help you make the best use
-               of your time during these unprecedented circumstances. Select some 
+               of your time during these unprecedented circumstances. Select some
                skills you would like to learn to get started!</Text>
           </CardItem>
 
@@ -187,7 +187,7 @@ class HomeScreen extends React.Component {
         <AppLoading/>
       )
     }
-  } 
+  }
 }
 
 //implement side nav
@@ -268,7 +268,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
           ))}
 
           <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
-      
+
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
@@ -343,7 +343,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
         <AppLoading/>
       )
     }
-  } 
+  }
 }
 
 class SecondScreen extends React.Component {
@@ -399,7 +399,7 @@ class SecondScreen extends React.Component {
           }
 
         }}>
-    
+
           <MenuTrigger>
             <View style={{alignItems: 'center', flexDirection:'row',}}>
 
@@ -481,11 +481,69 @@ class SecondScreen extends React.Component {
 
 
 class CodingScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+             min: 0,
+             sec: 0,
+             msec: 0
+         }
+  }
   static navigationOptions  = {
     title:'Coding'
   }
+  handleToggle = () => {
+        this.setState(
+            {
+                start: !this.state.start
+            },
+            () => this.handleStart()
+        );
+    };
+
+
+    handleStart = () => {
+        if (this.state.start) {
+            this.interval = setInterval(() => {
+                if (this.state.msec !== 100) {
+                    this.setState({
+                        msec: this.state.msec + 2
+                    });
+                } else if (this.state.sec !== 59) {
+                    this.setState({
+                        msec: 0,
+                        sec: ++this.state.sec
+                    });
+                } else {
+                    this.setState({
+                        msec: 0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+            }, 1);
+
+        } else {
+            clearInterval(this.interval);
+        }
+    };
+
+    handleReset = () => {
+        this.setState({
+            min: 0,
+            sec: 0,
+            msec: 0,
+
+            start: false
+        });
+
+        clearInterval(this.interval);
+
+    };
+
   render() {
     const {navigate} = this.props.navigation;
+
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <WebView
@@ -497,11 +555,30 @@ class CodingScreen extends React.Component{
         source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
 
       />
+      <Button
+      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      onPress = {this.handleToggle
+      }
+      />
+      <Text style={{
+        fontSize: 40,
+      color: "#C89933",}}>{(this.state.sec)}</Text>
+  <TouchableOpacity style={{
+  visibility:false,
+  borderRadius: 8,
+  paddingVertical: 15,
+  paddingHorizontal: 15,
+  backgroundColor: '#74b53d',
+  }} onPress={this.handleReset
+  }>
+  </TouchableOpacity>
+
       </View>
     );
     }
 
-}
+
+  }
 
 class CookingScreen extends React.Component{
   static navigationOptions  = {
@@ -760,7 +837,7 @@ else {
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-      
+
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
@@ -899,7 +976,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-      
+
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
