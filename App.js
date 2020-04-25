@@ -410,7 +410,7 @@ class AchievementScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+      <Text onPress={() => navigate('Home')}>This is achievements...Return To Home Screen</Text>
 
       </View>
     );
@@ -430,6 +430,9 @@ const styles = StyleSheet.create({
 const DrawerNavigator = createDrawerNavigator({
   Next: {
     screen: SecondScreen
+  },
+  Achievement: {
+    screen: AchievementScreen
   }
 })
 
@@ -456,7 +459,7 @@ const AppNavigator = createSwitchNavigator({
     screen: OtherScreen
   },
   Achievement:{
-    screen:AchievementScreen
+    screen:DrawerNavigator
   }
 
 
