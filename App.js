@@ -21,17 +21,19 @@ import * as Font from 'expo-font';
 
 
 var usersChoice;
+var passedStart=false;
+
 var wantCoding;
 var wantCooking;
 var wantInstrument;
 var wantLanguage;
 var wantOther;
+
 var whichMotivationalMessage;
 
 let customFonts = {
   'best-font': require('./assets/fonts/Manrope-Light.ttf'),
 };
-
 
 class HomeScreen extends React.Component {
   constructor(props){
@@ -171,10 +173,11 @@ class HomeScreen extends React.Component {
             return;
           }
           if ((this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true)&&((usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language"))){
-            navigate('Next');
             this.gettingStatesOfCheckboxes();
+            navigate('Next');
             alert('Congratulations on selecting your first activities! Using the navigation sidebar, you can choose whether you want to view your achievements, view your statistics, start an existing activity, or add a completely new activity. Once you click "OK" here, you will be taken to the screen in which you can start one of the activities that you just selected using the dropdown menu. Once you do that, you will be able to start learning that activity, record time doing that activity, or journal about what you are doing. Happy achieving!')
             whichMotivationalMessage= (Math.floor(Math.random()*3)+1);
+            passedStart=true;
           }
         }}/>
         </View>
@@ -188,6 +191,160 @@ class HomeScreen extends React.Component {
 }
 
 //implement side nav
+
+class MoreActivitiesThanInitiallyScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      one:wantCoding,
+      two:wantCooking,
+      three:wantInstrument,
+      four:wantLanguage,
+      five:wantOther,
+      TextInputValue: '',
+      fontsLoaded: false
+    }
+  }
+
+  async _loadFontsAsync() {
+    await Font.loadAsync(customFonts);
+    this.setState({ fontsLoaded: true });
+  }
+
+  componentDidMount() {
+    this._loadFontsAsync();
+  }
+
+  static navigationOptions = {
+    title: 'MoreActivities',
+  };
+
+  whichPressed(x){
+    if (this.state[x] == false){
+      this.setState({[x]: true});
+    } else {
+      this.setState({[x]: false});
+    }
+  }
+
+  gettingWhatUserTyped(){
+    usersChoice = this.state.TextInputValue
+  }
+
+  gettingStatesOfCheckboxes(){
+    wantCoding=this.state.one;
+    wantCooking=this.state.two;
+    wantInstrument=this.state.three;
+    wantLanguage=this.state.four;
+    wantOther=this.state.five;
+  }
+
+  render() {
+    const {navigate} = this.props.navigation;
+    const gradientHeight = 600;
+    const gradientBackground = '#95d65e';
+    const gradientHeight2 = 300;
+    const data = Array.from({ length: gradientHeight })
+    const data2 = Array.from({ length: gradientHeight2 })
+
+    if (this.state.fontsLoaded) {
+
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
+        {data.map((_, i) => (
+          <View
+            key={i}
+            style={{
+              position: 'absolute',
+              backgroundColor: gradientBackground,
+              height: 1,
+              right: 0,
+              left: 0,
+              zIndex: 2,
+              opacity: (1 / gradientHeight) * (i + 1),
+              bottom: (gradientHeight - i - 1)
+            }}
+          />
+          ))}
+
+          <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
+      
+        <Card style={{backgroundColor: '#eff9e7'}}>
+
+          <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
+            <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Here you can select more skills or uncheck ones you have already selected. You can add custom activities as well (up to 3).</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.one}
+            onPress={() => this.whichPressed("one")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Coding</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.two}
+            onPress={() => this.whichPressed("two")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Cooking</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.three}
+            onPress={() => this.whichPressed("three")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Playing an Instrument</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.four}
+            onPress={() => this.whichPressed("four")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Learning a Language</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.five}
+            onPress={() => this.whichPressed("five")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue=>this.setState({TextInputValue})}/>
+          </CardItem>
+
+          <View style={{marginVertical:5}}></View>
+
+        </Card>
+
+        <View style={{marginVertical:20}}></View>
+
+        <AdvButton text="Advance!" onPress={() => {
+          this.gettingWhatUserTyped();
+          if (this.state["five"]==true && usersChoice==""){
+            return;
+          }
+          if ((this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true)&&((usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language"))){
+            this.gettingStatesOfCheckboxes();
+            navigate('Next');
+            //alert('Congratulations on selecting your first activities! Using the navigation sidebar, you can choose whether you want to view your achievements, view your statistics, start an existing activity, or add a completely new activity. Once you click "OK" here, you will be taken to the screen in which you can start one of the activities that you just selected using the dropdown menu. Once you do that, you will be able to start learning that activity, record time doing that activity, or journal about what you are doing. Happy achieving!')
+            whichMotivationalMessage= (Math.floor(Math.random()*3)+1);
+            console.log(wantCoding);
+            passedStart=true;
+          }
+        }}/>
+        </View>
+    );
+    } else {
+      return (
+        <AppLoading/>
+      )
+    }
+  } 
+}
 
 class SecondScreen extends React.Component {
   static navigationOptions = {
@@ -269,48 +426,48 @@ class SecondScreen extends React.Component {
 
 
 
-          {whichMotivationalMessage==1?
+          {whichMotivationalMessage===1 &&
           <View style={{alignItems: 'center', justifyContent: 'center',}}>
             <Text style={{paddingVertical:75, fontSize: 75, fontFamily: 'best-font', width: 300}} onPress={() => navigate('Home')}>What will you achieve today?</Text>
-          </View>: null }
+          </View>}
 
-          {whichMotivationalMessage==2?
+          {whichMotivationalMessage===2 &&
           <View style={{alignItems: 'center', justifyContent: 'center',}}>
             <Text style={{paddingVertical:75, fontSize: 75 , fontFamily: 'best-font', width: 300}} onPress={() => navigate('Home')}>You got it!</Text>
-          </View>: null }
+          </View>}
 
-          {whichMotivationalMessage==3?
+          {whichMotivationalMessage===3 &&
           <View style={{alignItems: 'center', justifyContent: 'center',}}>
             <Text style={{paddingVertical:75, fontSize: 75, fontFamily: 'best-font',width: 300}} onPress={() => navigate('Home')}>Trust the process.</Text>
-          </View>: null }
+          </View>}
 
 
 
           <MenuOptions>
-            {wantCoding == true?
+            {wantCoding === true &&
             <MenuOption value={"Coding"}>
               <Text style={styles.menuContent}>Coding</Text>
-            </MenuOption>: null}
+            </MenuOption>}
 
-            {wantCooking == true?
+            {wantCooking === true &&
             <MenuOption value={"Cooking"}>
               <Text style={styles.menuContent}>Cooking</Text>
-            </MenuOption>: null}
+            </MenuOption>}
 
-            {wantInstrument == true?
+            {wantInstrument === true &&
             <MenuOption value={"Playing an Instrument"}>
               <Text style={styles.menuContent}>Playing an Instrument</Text>
-            </MenuOption>: null}
+            </MenuOption>}
 
-            {wantLanguage == true?
+            {wantLanguage === true &&
             <MenuOption value={"Learning a Language"}>
               <Text style={styles.menuContent}>Learning a Language</Text>
-            </MenuOption>: null}
+            </MenuOption>}
 
-            {wantOther == true?
+            {wantOther === true &&
             <MenuOption value={usersChoice}>
               <Text style={styles.menuContent}>{usersChoice}</Text>
-            </MenuOption>: null}
+            </MenuOption>}
 
           </MenuOptions>
 
@@ -321,6 +478,7 @@ class SecondScreen extends React.Component {
     );
     }
 }
+
 
 class CodingScreen extends React.Component{
   static navigationOptions  = {
@@ -452,6 +610,9 @@ const DrawerNavigator = createDrawerNavigator({
   Achievement: {
     screen: AchievementScreen
   },
+  MoreActivities: {
+    screen: MoreActivitiesThanInitiallyScreen
+  }
 
 }, {
   contentComponent: CustomDrawerComponent,
@@ -489,6 +650,9 @@ const AppNavigator = createSwitchNavigator({
   },
   Achievement:{
     screen:DrawerNavigator
+  },
+  MoreActivities: {
+    screen: DrawerNavigator
   }
 
 
@@ -546,5 +710,283 @@ else {
     }}
   />
   ))}
+
+  class MoreActivitiesThanInitiallyScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      one:wantCoding,
+      two:wantCooking,
+      three:wantInstrument,
+      four:wantLanguage,
+      five:wantOther,
+      TextInputValue: usersChoice,
+      six:wantOther2,
+      TextInputValue2: usersChoice2,
+      seven:wantOther3,
+      TextInputValue3: usersChoice3
+    }
+  }
+
+  whichPressed(x){
+    if (this.state[x] == false){
+      this.setState({[x]: true});
+    } else {
+      this.setState({[x]: false});
+    }
+  }
+
+  gettingWhatUserTyped(){
+    usersChoice = this.state.TextInputValue
+    usersChoice2 = this.state.TextInputValue2
+    usersChoice3 = this.state.TextInputValue3
+  }
+
+  settingVarsToStatesOfCheckboxes(){
+    wantCoding=this.state.one;
+    wantCooking=this.state.two;
+    wantInstrument=this.state.three;
+    wantLanguage=this.state.four;
+    wantOther=this.state.five;
+    wantOther2=this.state.six
+    wantOther3=this.state.seven
+  }
+
+  static navigationOptions  = {
+    title:'MoreActivities'
+  }
+
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
+      
+        <Card style={{backgroundColor: '#eff9e7'}}>
+
+          <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
+            <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Here you can choose more activities
+             that you would like to take up that
+            you may not have chosen initially. You can also add up to three custom activities.</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.one}
+            onPress={() => this.whichPressed("one")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Coding</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.two}
+            onPress={() => this.whichPressed("two")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Cooking</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.three}
+            onPress={() => this.whichPressed("three")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Playing an Instrument</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.four}
+            onPress={() => this.whichPressed("four")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Learning a Language</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.five}
+            onPress={() => this.whichPressed("five")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue=>this.setState({TextInputValue})}/>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.six}
+            onPress={() => this.whichPressed("six")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue2=>this.setState({TextInputValue2})}/>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.seven}
+            onPress={() => this.whichPressed("seven")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue3=>this.setState({TextInputValue3})}/>
+          </CardItem>
+
+          <View style={{marginVertical:5}}></View>
+
+        </Card>
+
+        <View style={{marginVertical:20}}></View>
+
+        <AdvButton text="Save" onPress={() => {
+          this.gettingWhatUserTyped();
+          if ((this.state["five"]==true && usersChoice=="")||(this.state["six"]==true && usersChoice2=="")||((this.state["seven"]==true && usersChoice3==""))){
+            return;
+          }
+          if ((this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true || this.state["six"]==true || this.state["seven"]==true)&&(usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language")||(usersChoice2!=="Coding" && usersChoice2!=="Cooking" && usersChoice2!=="Playing an Instrument" && usersChoice2!=="Learning a Language")||(usersChoice3!=="Coding" && usersChoice3!=="Cooking" && usersChoice3!=="Playing an Instrument" && usersChoice3!=="Learning a Language")){
+            this.settingVarsToStatesOfCheckboxes();
+            navigate('Next');
+            whichMotivationalMessage= (Math.floor(Math.random()*3)+1);
+          }
+        }}/>
+        </View>
+    );
+    }
+}
+
+class MoreActivitiesThanInitiallyScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      one2:wantCoding,
+      two2:wantCooking,
+      three2:wantInstrument,
+      four2:wantLanguage,
+      five2:wantOther,
+      TextInputValue1: usersChoice,
+      six:wantOther2,
+      TextInputValue2: usersChoice2,
+      seven:wantOther3,
+      TextInputValue3: usersChoice3
+    }
+  }
+
+  whichPressed(x){
+    if (this.state[x] == false){
+      this.setState({[x]: true});
+    } else {
+      this.setState({[x]: false});
+    }
+  }
+
+  gettingWhatUserTypedAgain(){
+    usersChoiceAgain = this.state.TextInputValue1
+    usersChoice2 = this.state.TextInputValue2
+    usersChoice3 = this.state.TextInputValue3
+  }
+
+  settingVarsToStatesOfCheckboxes(){
+    wantCodingAgain=this.state.one2;
+    wantCookingAgain=this.state.two2;
+    wantInstrumentAgain=this.state.three2;
+    wantLanguageAgain=this.state.four2;
+    wantOtherAgain=this.state.five2;
+    wantOther2=this.state.six2;
+    wantOther3=this.state.seven2;
+  }
+
+  static navigationOptions  = {
+    title:'MoreActivities'
+  }
+
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
+      
+        <Card style={{backgroundColor: '#eff9e7'}}>
+
+          <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
+            <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Here you can choose more activities
+             that you would like to take up that
+            you may not have chosen initially. You can also add up to three custom activities.</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.one2}
+            onPress={() => this.whichPressed("one2")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Coding</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.two2}
+            onPress={() => this.whichPressed("two2")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Cooking</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.three2}
+            onPress={() => this.whichPressed("three2")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Playing an Instrument</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.four2}
+            onPress={() => this.whichPressed("four2")}
+            style={{marginRight:20}}
+            />
+            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Learning a Language</Text>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.five2}
+            onPress={() => this.whichPressed("five2")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue1=>this.setState({TextInputValue1})}/>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.six2}
+            onPress={() => this.whichPressed("six2")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue2=>this.setState({TextInputValue2})}/>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.seven2}
+            onPress={() => this.whichPressed("seven2")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue3=>this.setState({TextInputValue3})}/>
+          </CardItem>
+
+          <View style={{marginVertical:5}}></View>
+
+        </Card>
+
+        <View style={{marginVertical:20}}></View>
+
+        <AdvButton text="Save" onPress={() => {
+          this.gettingWhatUserTypedAgain();
+          if ((this.state["five2"]==true && usersChoiceAgain=="")||(this.state["six2"]==true && usersChoice2=="")||((this.state["seven2"]==true && usersChoice3==""))){
+            return;
+          }
+          if ((this.state["one2"]==true || this.state["two2"]==true || this.state["three2"]==true || this.state["four2"]==true || this.state["five2"]==true || this.state["six2"]==true || this.state["seven2"]==true)&&(usersChoiceAgain!=="Coding" && usersChoiceAgain!=="Cooking" && usersChoiceAgain!=="Playing an Instrument" && usersChoiceAgain!=="Learning a Language")||(usersChoice2!=="Coding" && usersChoice2!=="Cooking" && usersChoice2!=="Playing an Instrument" && usersChoice2!=="Learning a Language")||(usersChoice3!=="Coding" && usersChoice3!=="Cooking" && usersChoice3!=="Playing an Instrument" && usersChoice3!=="Learning a Language")){
+            this.settingVarsToStatesOfCheckboxes();
+            navigate('Next');
+            whichMotivationalMessage= (Math.floor(Math.random()*3)+1);
+          }
+        }}/>
+        </View>
+    );
+    }
+}
 
   */
