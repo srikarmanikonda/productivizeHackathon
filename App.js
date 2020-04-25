@@ -6,7 +6,7 @@ import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, 
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
-import { AntDesign } from 'react-native-vector-icons';
+import { AntDesign, Feather } from 'react-native-vector-icons';
 import { WebView } from 'react-native-webview';
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
@@ -246,7 +246,7 @@ class SecondScreen extends React.Component {
           <MenuTrigger>
             <View style={{alignItems: 'center', flexDirection:'row',}}>
 
-            <AntDesign name='bars' size={30} onPress={()=> this.props.navigation.openDrawer()} style={{marginRight: '8%',}}/>
+            <Feather name='menu' size={25} onPress={()=> this.props.navigation.openDrawer()} style={{marginRight: '8%',}}/>
 
             <View style={{alignItems:'center'}}>
             <Card
