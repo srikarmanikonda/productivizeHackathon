@@ -1,7 +1,8 @@
 import React, {Component, useState} from 'react';
 import { Platform, View, Text, StyleSheet, ActivityIndicator, TextInput, Picker, Alert, YellowBox} from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Content } from 'native-base';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Content, Drawer } from 'native-base';
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
@@ -165,23 +166,18 @@ class HomeScreen extends React.Component {
         <View style={{marginVertical:20}}></View>
 
         <AdvButton text="Advance!" onPress={() => {
-
-          if (this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true){
+          this.gettingWhatUserTyped();
+          if (this.state["five"]==true && usersChoice==""){
+            return;
+          }
+          if ((this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true)&&((usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language"))){
             navigate('Next');
+            this.gettingStatesOfCheckboxes();
+            alert('Congratulations on selecting your first activities! Using the navigation sidebar, you can choose whether you want to view your achievements, view your statistics, start an existing activity, or add a completely new activity. Once you click "OK" here, you will be taken to the screen in which you can start one of the activities that you just selected using the dropdown menu. Once you do that, you will be able to start learning that activity, record time doing that activity, or journal about what you are doing. Happy achieving!')
             whichMotivationalMessage= (Math.floor(Math.random()*3)+1);
           }
-
-          this.gettingWhatUserTyped();
-
-          this.gettingStatesOfCheckboxes();
-
-          alert('Congratulations on selecting your first activities! Using the navigation sidebar, you can choose whether you want to view your achievements, view your statistics, start an existing activity, or add a completely new activity. Once you click "OK" here, you will be taken to the screen in which you can start one of the activities that you just selected using the dropdown menu. Once you do that, you will be able to start learning that activity, record time doing that activity, or journal about what you are doing. Happy achieving!')
-
         }}/>
-
-
-
-      </View>
+        </View>
     );
     } else {
       return (
@@ -228,6 +224,23 @@ class SecondScreen extends React.Component {
           if (value=='Coding'){
             navigate('Coding')
           }
+
+          if (value=='Cooking'){
+            navigate('Cooking')
+          }
+
+          if (value=='Playing an Instrument'){
+            navigate('Instrument')
+          }
+
+          if (value=='Learning a Language'){
+            navigate('Language')
+          }
+
+          if (value==usersChoice){
+            navigate('Coding')
+          }
+
         }}>
     
           <MenuTrigger>
@@ -373,6 +386,22 @@ class LanguageScreen extends React.Component{
 
 }
 
+class OtherScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Other'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text onPress={() => navigate('Home')}>This is other screen...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
 class AchievementScreen extends React.Component{
   static navigationOptions  = {
     title:'Achievement'
@@ -394,16 +423,22 @@ const styles = StyleSheet.create({
   menuContent: {
   color: "#000",
   padding: 2,
-  fontSize: 15., fontFamily: 'best-font'
+  fontSize: 15, fontFamily: 'best-font'
 }
 });
+
+const DrawerNavigator = createDrawerNavigator({
+  Next: {
+    screen: SecondScreen
+  }
+})
 
 const AppNavigator = createSwitchNavigator({
   Home: {
     screen: HomeScreen
   },
   Next: {
-    screen: SecondScreen
+    screen: DrawerNavigator
 },
   Coding:{
     screen:CodingScreen
@@ -416,6 +451,9 @@ const AppNavigator = createSwitchNavigator({
   },
   Language:{
     screen:LanguageScreen
+  },
+  Other: {
+    screen: OtherScreen
   },
   Achievement:{
     screen:AchievementScreen
