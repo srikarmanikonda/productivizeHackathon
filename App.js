@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react';
-import { Platform, View, Text, StyleSheet, ActivityIndicator, TextInput, Picker, Alert, YellowBox, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { Platform, View, Text, StyleSheet,TouchableOpacity, ActivityIndicator, TextInput, Picker, Alert, YellowBox, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Content, Drawer } from 'native-base';
@@ -11,6 +11,7 @@ import { WebView } from 'react-native-webview';
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
+import { LinearGradient } from 'expo-linear-gradient';
 
 //nothing is global!!!! so make variables
 //same "principles" often apply...
@@ -94,21 +95,16 @@ class HomeScreen extends React.Component {
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-        {data.map((_, i) => (
-          <View
-            key={i}
-            style={{
-              position: 'absolute',
-              backgroundColor: gradientBackground,
-              height: 1,
-              right: 0,
-              left: 0,
-              zIndex: 2,
-              opacity: (1 / gradientHeight) * (i + 1),
-              bottom: (gradientHeight - i - 1)
-            }}
-          />
-          ))}
+<LinearGradient
+colors = {['#fff','#95d65e']}
+style={{
+           position: 'absolute',
+           left: 0,
+           right: 0,
+           top: 0,
+           height: "100%",
+         }}
+/>
 
           <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
 
@@ -251,21 +247,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-        {data.map((_, i) => (
-          <View
-            key={i}
-            style={{
-              position: 'absolute',
-              backgroundColor: gradientBackground,
-              height: 1,
-              right: 0,
-              left: 0,
-              zIndex: 2,
-              opacity: (1 / gradientHeight) * (i + 1),
-              bottom: (gradientHeight - i - 1)
-            }}
-          />
-          ))}
+
 
           <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
 
