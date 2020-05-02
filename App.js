@@ -512,7 +512,8 @@ class CodingScreen extends React.Component{
 
     handleReset = () => {
       if(this.state.sec >0){
-        alert('you have been practicing for ' + this.state.sec + 'seconds')
+        Alert.alert("Thanks for practicing!",
+          'you have been practicing for ' + this.state.sec + ' ' + 'seconds')
         this.setState({
             min: 0,
             sec: 0,
