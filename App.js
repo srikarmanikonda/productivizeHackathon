@@ -6,7 +6,7 @@ import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, 
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
-import { AntDesign, Feather, MaterialIcons, MaterialCommunityIcons, FontAwesome5 } from 'react-native-vector-icons';
+import { AntDesign, Feather, MaterialIcons, MaterialCommunityIcons, FontAwesome5, Entypo, Ionicons } from 'react-native-vector-icons';
 import { WebView } from 'react-native-webview';
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
@@ -627,6 +627,7 @@ class AchievementScreen extends React.Component{
       <View>
         <MaterialIcons size={25} name='computer' color='#E5BB33'/>
       </View>
+
       <View>
         <MaterialCommunityIcons size={25} name='chef-hat' color='#cd7f32'/>
       </View>
@@ -636,6 +637,8 @@ class AchievementScreen extends React.Component{
       <View>
         <MaterialCommunityIcons size={25} name='chef-hat' color='#e5bb33'/>
       </View>
+
+
       <View>
         <FontAwesome5 size={25} name='guitar' color='#cd7f32'/>
       </View>
@@ -644,6 +647,36 @@ class AchievementScreen extends React.Component{
       </View>
       <View>
         <FontAwesome5 size={25} name='guitar' color='#e5bb33'/>
+      </View>
+      <View>
+        <Entypo size={25} name='language' color='#cd7f32'/>
+      </View>
+      <View>
+        <Entypo size={25} name='language' color='#c0c0c0'/>
+      </View>
+      <View>
+        <Entypo size={25} name='language' color='#e5bb33'/>
+      </View>
+      <View>
+        <Feather size={25} name='book-open' color='#cd7f32'/>
+      </View>
+      <View>
+        <Feather size={25} name='book-open' color='#c0c0c0'/>
+      </View>
+      <View>
+        <Feather size={25} name='book-open' color='#e5bb33'/>
+      </View>
+      <View>
+        <FontAwesome5 size={50} name='suitcase'/>
+      </View>
+      <View>
+        <Ionicons size={50} name='ios-journal'/>
+      </View>
+      <View>
+        <MaterialCommunityIcons size={50} name='dice-5'/>
+      </View>
+      <View>
+        <MaterialCommunityIcons size={50} name='dice-d10'/>
       </View>
       </View>
     );
