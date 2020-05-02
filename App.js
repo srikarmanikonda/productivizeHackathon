@@ -206,7 +206,7 @@ class HomeScreen extends React.Component {
         <AppLoading/>
       )
     }
-  } 
+  }
 }
 
 //implement side nav
@@ -521,13 +521,83 @@ class SecondScreen extends React.Component {
 
 
 class CodingScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+             min: 0,
+             sec: 0,
+             msec: 0
+         }
+  }
   static navigationOptions  = {
     title:'Coding'
   }
+  handleToggle = () => {
+        this.setState(
+            {
+                start: !this.state.start
+            },
+            () => this.handleStart()
+        );
+    };
+
+
+    handleStart = () => {
+        if (this.state.start) {
+            this.interval = setInterval(() => {
+                if (this.state.msec !== 100) {
+                    this.setState({
+                        msec: this.state.msec + 2
+                    });
+                } else if (this.state.sec !== 59) {
+                    this.setState({
+                        msec: 0,
+                        sec: ++this.state.sec
+                    });
+                } else {
+                    this.setState({
+                        msec: 0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+            }, 1);
+
+        } else {
+            clearInterval(this.interval);
+        }
+    };
+
+    handleReset = () => {
+      if(this.state.sec >0){
+        Alert.alert("Thanks for practicing!",
+          'you have been practicing for ' + this.state.sec + ' ' + 'seconds')
+        this.setState({
+            min: 0,
+            sec: 0,
+            msec: 0,
+
+            start: false
+        });
+        clearInterval(this.interval);
+}
+    };
+
   render() {
     const {navigate} = this.props.navigation;
+
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <WebView
         style={{height: "22.5%", width: 225, marginVertical: "70%", bottom:"12%" }}
         javaScriptEnabled={true}
@@ -537,11 +607,27 @@ class CodingScreen extends React.Component{
         source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
 
       />
+      <Button
+      style = {{top:"-180%"}}
+      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      onPress = {this.handleToggle
+      }
+      />
+      <Button
+      style = {{top:"-100%",bottom:"15%"}}
+      title = {'Stop and Log'}
+      onPress = {this.handleReset
+      }
+      />
+
+
+
       </View>
     );
     }
 
-}
+
+  }
 
 class CookingScreen extends React.Component{
   static navigationOptions  = {
@@ -551,7 +637,17 @@ class CookingScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text onPress={() => navigate('Next')}>This is cooking...Return To Past Screen</Text>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
 
       </View>
     );
@@ -567,6 +663,16 @@ class InstrumentScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <Text onPress={() => navigate('Home')}>This is instrument...Return To Home Screen</Text>
 
       </View>
@@ -583,6 +689,16 @@ class LanguageScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <Text onPress={() => navigate('Home')}>This is learning a language screen...Return To Home Screen</Text>
 
       </View>
@@ -599,6 +715,16 @@ class OtherScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <Text onPress={() => navigate('Home')}>This is other screen...Return To Home Screen</Text>
 
       </View>
@@ -681,6 +807,51 @@ class AchievementScreen extends React.Component{
       </View>
     );
   }}
+  class Logbook extends React.Component{
+    static navigationOptions  = {
+      title:'Journal/Log'
+    }
+    render() {
+      const {navigate} = this.props.navigation;
+      this.state = {
+        writer:''
+      }
+
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <LinearGradient
+        colors = {['#fff','#95d65e']}
+        style={{
+                   position: 'absolute',
+                   left: 0,
+                   right: 0,
+                   top: 0,
+                   height: "100%",
+                 }}
+        />
+        <View style = {{width:"90%",
+   backgroundColor:"#fff",
+   borderRadius:25,
+   height:"85%",
+   marginBottom:"10%",
+   justifyContent:"center",
+   padding:20,
+   top:"1%"}}>
+
+        <TextInput
+            style={{ height:50,
+   color:"black",
+ top:"-49%"}}
+            placeholder = " Begin writing about your experiences here..."
+            placeholderTextColor="silver"
+            onChangeText={writer => this.setState({writer })}
+
+       />
+        </View>
+        </View>
+      );
+    }
+  }
 
 const styles = StyleSheet.create({
   headerText: {
@@ -713,6 +884,9 @@ const DrawerNavigator = createDrawerNavigator({
   },
   MoreActivities: {
     screen: MoreActivitiesThanInitiallyScreen
+  },
+  Logbook:{
+    screen:Logbook
   }
 
 }, {
@@ -734,7 +908,8 @@ const AppNavigator = createSwitchNavigator({
   Next: {
     screen: DrawerNavigator
 },
-  Coding:{
+Coding:
+  {
     screen:CodingScreen
   },
   Cooking:{
@@ -861,7 +1036,7 @@ else {
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-      
+
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
@@ -1000,7 +1175,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-      
+
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
