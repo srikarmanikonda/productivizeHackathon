@@ -1,11 +1,11 @@
 import React, {Component, useState} from 'react';
-import { Platform, View, Text, StyleSheet,TouchableOpacity, ActivityIndicator, TextInput, Picker, Alert, YellowBox, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { Platform, View, Text, StyleSheet,TouchableOpacity, ActivityIndicator,  Picker, Alert, YellowBox, SafeAreaView, ScrollView, Dimensions,TextInput } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Content, Drawer } from 'native-base';
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
-import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
+import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { AntDesign, Feather } from 'react-native-vector-icons';
 import { WebView } from 'react-native-webview';
 import { useFonts } from '@use-expo/font';
@@ -511,6 +511,8 @@ class CodingScreen extends React.Component{
     };
 
     handleReset = () => {
+      if(this.state.sec >0){
+        alert('you have been practicing for ' + this.state.sec + 'seconds')
         this.setState({
             min: 0,
             sec: 0,
@@ -518,9 +520,8 @@ class CodingScreen extends React.Component{
 
             start: false
         });
-
         clearInterval(this.interval);
-
+}
     };
 
   render() {
@@ -528,6 +529,16 @@ class CodingScreen extends React.Component{
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <WebView
         style={{height: "22.5%", width: 225, marginVertical: "70%", bottom:"12%" }}
         javaScriptEnabled={true}
@@ -538,22 +549,19 @@ class CodingScreen extends React.Component{
 
       />
       <Button
+      style = {{top:"-180%"}}
       title = {!this.state.start? 'Start time': 'Pause Activity'}
       onPress = {this.handleToggle
       }
       />
-      <Text style={{
-        fontSize: 40,
-      color: "#C89933",}}>{(this.state.sec)}</Text>
-  <TouchableOpacity style={{
-  visibility:false,
-  borderRadius: 8,
-  paddingVertical: 15,
-  paddingHorizontal: 15,
-  backgroundColor: '#74b53d',
-  }} onPress={this.handleReset
-  }>
-  </TouchableOpacity>
+      <Button
+      style = {{top:"-100%",bottom:"15%"}}
+      title = {'Stop and Log'}
+      onPress = {this.handleReset
+      }
+      />
+
+
 
       </View>
     );
@@ -570,6 +578,16 @@ class CookingScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
 
       </View>
@@ -586,6 +604,16 @@ class InstrumentScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <Text onPress={() => navigate('Home')}>This is instrument...Return To Home Screen</Text>
 
       </View>
@@ -602,6 +630,16 @@ class LanguageScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <Text onPress={() => navigate('Home')}>This is learning a language screen...Return To Home Screen</Text>
 
       </View>
@@ -618,6 +656,16 @@ class OtherScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
       <Text onPress={() => navigate('Home')}>This is other screen...Return To Home Screen</Text>
 
       </View>
@@ -639,6 +687,51 @@ class AchievementScreen extends React.Component{
       </View>
     );
   }}
+  class Logbook extends React.Component{
+    static navigationOptions  = {
+      title:'Journal/Log'
+    }
+    render() {
+      const {navigate} = this.props.navigation;
+      this.state = {
+        writer:''
+      }
+
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <LinearGradient
+        colors = {['#fff','#95d65e']}
+        style={{
+                   position: 'absolute',
+                   left: 0,
+                   right: 0,
+                   top: 0,
+                   height: "100%",
+                 }}
+        />
+        <View style = {{width:"90%",
+   backgroundColor:"#fff",
+   borderRadius:25,
+   height:"85%",
+   marginBottom:"10%",
+   justifyContent:"center",
+   padding:20,
+   top:"1%"}}>
+
+        <TextInput
+            style={{ height:50,
+   color:"black",
+ top:"-49%"}}
+            placeholder = " Begin writing about your experiences here..."
+            placeholderTextColor="silver"
+            onChangeText={writer => this.setState({writer })}
+
+       />
+        </View>
+        </View>
+      );
+    }
+  }
 
 const styles = StyleSheet.create({
   headerText: {
@@ -671,6 +764,9 @@ const DrawerNavigator = createDrawerNavigator({
   },
   MoreActivities: {
     screen: MoreActivitiesThanInitiallyScreen
+  },
+  Logbook:{
+    screen:Logbook
   }
 
 }, {
@@ -692,7 +788,8 @@ const AppNavigator = createSwitchNavigator({
   Next: {
     screen: DrawerNavigator
 },
-  Coding:{
+Coding:
+  {
     screen:CodingScreen
   },
   Cooking:{
