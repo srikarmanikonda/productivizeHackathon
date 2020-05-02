@@ -1,16 +1,17 @@
 import React, {Component, useState} from 'react';
-import { Platform, View, Text, StyleSheet, ActivityIndicator, TextInput, Picker, Alert, YellowBox, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { StatusBar, Platform, View, Text, StyleSheet, ActivityIndicator, TextInput, Picker, Alert, YellowBox, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { Container, Header, Body, CheckBox, Title, Card, CardItem, Left, Right, Content, Drawer } from 'native-base';
 import { Button, Image } from 'react-native-elements';
 import AdvButton from './button';
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
-import { AntDesign, Feather } from 'react-native-vector-icons';
+import { AntDesign, Feather, MaterialIcons, MaterialCommunityIcons, FontAwesome5 } from 'react-native-vector-icons';
 import { WebView } from 'react-native-webview';
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
+import { LinearGradient } from 'expo-linear-gradient';
 
 //nothing is global!!!! so make variables
 //same "principles" often apply...
@@ -21,13 +22,16 @@ import * as Font from 'expo-font';
 
 
 var usersChoice;
-var passedStart=false;
+var usersChoice2;
+var usersChoice3;
 
 var wantCoding;
 var wantCooking;
 var wantInstrument;
 var wantLanguage;
 var wantOther;
+var wantOther2;
+var wantOther3;
 
 var whichMotivationalMessage;
 
@@ -44,7 +48,11 @@ class HomeScreen extends React.Component {
       three:false,
       four:false,
       five:false,
+      six: false,
+      seven: false,
       TextInputValue: '',
+      TextInputValue2: '',
+      TextInputValue3: '',
       fontsLoaded: false
     }
   }
@@ -72,6 +80,8 @@ class HomeScreen extends React.Component {
 
   gettingWhatUserTyped(){
     usersChoice = this.state.TextInputValue
+    usersChoice2 = this.state.TextInputValue2
+    usersChoice3 = this.state.TextInputValue3
   }
 
   gettingStatesOfCheckboxes(){
@@ -80,44 +90,36 @@ class HomeScreen extends React.Component {
     wantInstrument=this.state.three;
     wantLanguage=this.state.four;
     wantOther=this.state.five;
+    wantOther2=this.state.six;
+    wantOther3=this.state.seven;
   }
 
   render() {
     const {navigate} = this.props.navigation;
-    const gradientHeight = 600;
-    const gradientBackground = '#95d65e';
-    const gradientHeight2 = 300;
-    const data = Array.from({ length: gradientHeight })
-    const data2 = Array.from({ length: gradientHeight2 })
 
     if (this.state.fontsLoaded) {
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-        {data.map((_, i) => (
-          <View
-            key={i}
-            style={{
-              position: 'absolute',
-              backgroundColor: gradientBackground,
-              height: 1,
-              right: 0,
-              left: 0,
-              zIndex: 2,
-              opacity: (1 / gradientHeight) * (i + 1),
-              bottom: (gradientHeight - i - 1)
-            }}
-          />
-          ))}
+        <StatusBar hidden/>
+        <LinearGradient colors = {['#fff','#95d65e']}
+          style={{
+           position: 'absolute',
+           left: 0,
+           right: 0,
+           top: 0,
+           height: "100%",
+         }}
+        />
 
-          <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
+          <Image source={require('./assets/cover.png')} style={{ width: 400, height: 75, marginVertical: '-0.35%' }}/>
       
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
-            <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Welcome! Productivize is designed to help you make the best use
+            <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Productivize is designed to help you make the best use
                of your time during these unprecedented circumstances. Select some 
-               skills you would like to learn to get started!</Text>
+               skills you would like to learn (or simply spend more time doing) to get started!</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -125,7 +127,7 @@ class HomeScreen extends React.Component {
             onPress={() => this.whichPressed("one")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Coding</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Coding</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -133,7 +135,7 @@ class HomeScreen extends React.Component {
             onPress={() => this.whichPressed("two")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Cooking</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Cooking</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -141,7 +143,7 @@ class HomeScreen extends React.Component {
             onPress={() => this.whichPressed("three")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Playing an Instrument</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Playing an Instrument</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -149,7 +151,7 @@ class HomeScreen extends React.Component {
             onPress={() => this.whichPressed("four")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Learning a Language</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Learning a Language</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -157,27 +159,44 @@ class HomeScreen extends React.Component {
             onPress={() => this.whichPressed("five")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
             placeholder= 'Other: enter another activity!' onChangeText={TextInputValue=>this.setState({TextInputValue})}/>
           </CardItem>
 
-          <View style={{marginVertical:5}}></View>
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.six}
+            onPress={() => this.whichPressed("six")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue2=>this.setState({TextInputValue2})}/>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7', marginBottom: 5}}>
+            <CheckBox color='#74b53d' checked={this.state.seven}
+            onPress={() => this.whichPressed("seven")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
+            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue3=>this.setState({TextInputValue3})}/>
+          </CardItem>
+
 
         </Card>
 
-        <View style={{marginVertical:20}}></View>
+        <View style={{marginVertical:3}}></View>
 
         <AdvButton text="Advance!" onPress={() => {
           this.gettingWhatUserTyped();
-          if (this.state["five"]==true && usersChoice==""){
+          if ((this.state["five"]==true && usersChoice=="")||(this.state["six"]==true && usersChoice2=="")||(this.state["seven"]==true && usersChoice3=="")){
             return;
           }
-          if ((this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true)&&((usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language"))){
+          if ((this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true)&&((usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language"))&&((usersChoice2!=="Coding" && usersChoice2!=="Cooking" && usersChoice2!=="Playing an Instrument" && usersChoice2!=="Learning a Language"))&&((usersChoice3!=="Coding" && usersChoice3!=="Cooking" && usersChoice3!=="Playing an Instrument" && usersChoice3!=="Learning a Language"))){
             this.gettingStatesOfCheckboxes();
             navigate('Next');
             alert('Congratulations on selecting your first activities! Using the navigation sidebar, you can choose whether you want to view your achievements, view your statistics, start an existing activity, or add a completely new activity. Once you click "OK" here, you will be taken to the screen in which you can start one of the activities that you just selected using the dropdown menu. Once you do that, you will be able to start learning that activity, record time doing that activity, or journal about what you are doing. Happy achieving!')
             whichMotivationalMessage= (Math.floor(Math.random()*3)+1);
-            passedStart=true;
+      
           }
         }}/>
         </View>
@@ -196,12 +215,16 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      one:wantCoding,
-      two:wantCooking,
-      three:wantInstrument,
-      four:wantLanguage,
-      five:wantOther,
-      TextInputValue: '',
+      one1:wantCoding,
+      two1:wantCooking,
+      three1:wantInstrument,
+      four1:wantLanguage,
+      five1:wantOther,
+      six1:wantOther2,
+      seven1:wantOther3,
+      TextInputValue1: usersChoice,
+      TextInputValue21: usersChoice2,
+      TextInputValue31: usersChoice3,
       fontsLoaded: false
     }
   }
@@ -216,7 +239,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'MoreActivities',
+    title: 'More Activities',
   };
 
   whichPressed(x){
@@ -227,157 +250,164 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
     }
   }
 
-  gettingWhatUserTyped(){
-    usersChoice = this.state.TextInputValue
+  gettingWhatUserTypedAgain(){
+    usersChoice = this.state.TextInputValue1
+    usersChoice2 = this.state.TextInputValue21
+    usersChoice3 = this.state.TextInputValue31
   }
 
-  gettingStatesOfCheckboxes(){
-    wantCoding=this.state.one;
-    wantCooking=this.state.two;
-    wantInstrument=this.state.three;
-    wantLanguage=this.state.four;
-    wantOther=this.state.five;
+  gettingStatesOfCheckboxesAgain(){
+    wantCoding=this.state.one1;
+    wantCooking=this.state.two1;
+    wantInstrument=this.state.three1;
+    wantLanguage=this.state.four1;
+    wantOther=this.state.five1;
+    wantOther2=this.state.six1;
+    wantOther3 = this.state.seven1;
   }
+
+
 
   render() {
     const {navigate} = this.props.navigation;
-    const gradientHeight = 600;
-    const gradientBackground = '#95d65e';
-    const gradientHeight2 = 300;
-    const data = Array.from({ length: gradientHeight })
-    const data2 = Array.from({ length: gradientHeight2 })
-
-    if (this.state.fontsLoaded) {
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}>
-        {data.map((_, i) => (
-          <View
-            key={i}
-            style={{
-              position: 'absolute',
-              backgroundColor: gradientBackground,
-              height: 1,
-              right: 0,
-              left: 0,
-              zIndex: 2,
-              opacity: (1 / gradientHeight) * (i + 1),
-              bottom: (gradientHeight - i - 1)
-            }}
-          />
-          ))}
 
-          <Image source={require('./assets/cover.png')} style={{ width: 400, height: 100 }}/>
+          <Image source={require('./assets/cover.png')} style={{ width: 400, height: 75, marginVertical: '-0.35%' }}/>
       
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
-            <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Here you can select more skills or uncheck ones you have already selected. You can add custom activities as well (up to 3).</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font',}}>Here you can select more skills or uncheck ones you have already selected. You can add custom activities as well (up to 3).</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
-            <CheckBox color='#74b53d' checked={this.state.one}
-            onPress={() => this.whichPressed("one")}
+            <CheckBox color='#74b53d' checked={this.state.one1}
+            onPress={() => this.whichPressed("one1")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Coding</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Coding</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
-            <CheckBox color='#74b53d' checked={this.state.two}
-            onPress={() => this.whichPressed("two")}
+            <CheckBox color='#74b53d' checked={this.state.two1}
+            onPress={() => this.whichPressed("two1")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Cooking</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Cooking</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
-            <CheckBox color='#74b53d' checked={this.state.three}
-            onPress={() => this.whichPressed("three")}
+            <CheckBox color='#74b53d' checked={this.state.three1}
+            onPress={() => this.whichPressed("three1")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Playing an Instrument</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Playing an Instrument</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
-            <CheckBox color='#74b53d' checked={this.state.four}
-            onPress={() => this.whichPressed("four")}
+            <CheckBox color='#74b53d' checked={this.state.four1}
+            onPress={() => this.whichPressed("four1")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Learning a Language</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Learning a Language</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
-            <CheckBox color='#74b53d' checked={this.state.five}
-            onPress={() => this.whichPressed("five")}
+            <CheckBox color='#74b53d' checked={this.state.five1}
+            onPress={() => this.whichPressed("five1")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
-            placeholder= 'Other: enter another activity!' onChangeText={TextInputValue=>this.setState({TextInputValue})}/>
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
+            placeholder= {usersChoice} onChangeText={TextInputValue1=>this.setState({TextInputValue1})}/>
           </CardItem>
 
-          <View style={{marginVertical:5}}></View>
+          <CardItem body style={{backgroundColor: '#eff9e7'}}>
+            <CheckBox color='#74b53d' checked={this.state.six1}
+            onPress={() => this.whichPressed("six1")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
+            placeholder= {usersChoice2} onChangeText={TextInputValue21=>this.setState({TextInputValue21})}/>
+          </CardItem>
+
+          <CardItem body style={{backgroundColor: '#eff9e7', marginBottom: 5}}>
+            <CheckBox color='#74b53d' checked={this.state.seven1}
+            onPress={() => this.whichPressed("seven1")}
+            style={{marginRight:20}}
+            />
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
+            placeholder= {usersChoice3} onChangeText={TextInputValue31=>this.setState({TextInputValue31})}/>
+          </CardItem>
+
+          <View style={{marginVertical:3}}></View>
 
         </Card>
 
-        <View style={{marginVertical:20}}></View>
+        <View style={{marginVertical:3}}></View>
 
-        <AdvButton text="Advance!" onPress={() => {
-          this.gettingWhatUserTyped();
-          if (this.state["five"]==true && usersChoice==""){
+        <AdvButton text="Save!" onPress={() => {
+
+          this.gettingWhatUserTypedAgain();
+          if ((this.state["five1"]==true && usersChoice=="")||(this.state["six1"]==true && usersChoice2=="")||(this.state["seven1"]==true && usersChoice3=="")){
             return;
           }
-          if ((this.state["one"]==true || this.state["two"]==true || this.state["three"]==true || this.state["four"]==true || this.state["five"]==true)&&((usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language"))){
-            this.gettingStatesOfCheckboxes();
+          if ((this.state["one1"]==true || this.state["two1"]==true || this.state["three1"]==true || this.state["four1"]==true || this.state["five1"]==true)&&((usersChoice!=="Coding" && usersChoice!=="Cooking" && usersChoice!=="Playing an Instrument" && usersChoice!=="Learning a Language"))&&((usersChoice2!=="Coding" && usersChoice2!=="Cooking" && usersChoice2!=="Playing an Instrument" && usersChoice2!=="Learning a Language"))&&((usersChoice3!=="Coding" && usersChoice3!=="Cooking" && usersChoice3!=="Playing an Instrument" && usersChoice3!=="Learning a Language"))){
+            this.gettingStatesOfCheckboxesAgain();
             navigate('Next');
-            //alert('Congratulations on selecting your first activities! Using the navigation sidebar, you can choose whether you want to view your achievements, view your statistics, start an existing activity, or add a completely new activity. Once you click "OK" here, you will be taken to the screen in which you can start one of the activities that you just selected using the dropdown menu. Once you do that, you will be able to start learning that activity, record time doing that activity, or journal about what you are doing. Happy achieving!')
             whichMotivationalMessage= (Math.floor(Math.random()*3)+1);
-            console.log(wantCoding);
-            passedStart=true;
           }
         }}/>
+
         </View>
     );
-    } else {
-      return (
-        <AppLoading/>
-      )
-    }
-  } 
+  }
 }
 
 class SecondScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      coding:wantCoding,
+      cooking:wantCooking,
+      instrument:wantInstrument,
+      language:wantLanguage,
+      other:wantOther,
+      TextInputValue: ''
+    }
+  }
+
+
   static navigationOptions = {
     title: 'Next',
   };
 
+  setStatesOnPress = () => {
+
+    this.setState({["coding"]:wantCoding});
+    this.setState({["cooking"]:wantCooking});
+    this.setState({["instrument"]: wantInstrument});
+    this.setState({["language"]: wantLanguage});
+    this.setState({["other"]: wantOther});
+    this.setState({["other2"]: wantOther2});
+    this.setState({["other3"]: wantOther3});
+    
+
+  }
+
   render() {
     const {navigate} = this.props.navigation;
-    const gradientHeight = 675;
-    const gradientBackground = '#95d65e';
-    const gradientHeight2 = 300;
-    const data = Array.from({ length: gradientHeight })
-    const data2 = Array.from({ length: gradientHeight2 })
+
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-        {data.map((_, i) => (
-          <View
-            key={i}
-            style={{
-              position: 'absolute',
-              backgroundColor: gradientBackground,
-              height: 1,
-              right: 0,
-              left: 0,
-              zIndex: 2,
-              opacity: (1 / gradientHeight) * (i + 1),
-              bottom: (gradientHeight - i - 1)
-            }}
-          />
-          ))}
+    
         <MenuProvider style={{ padding: 30 }}>
 
-        <Menu onSelect={value => {
+        <Menu 
+        
+        onSelect={value => {
+
           if (value=='Coding'){
             navigate('Coding')
           }
@@ -399,12 +429,12 @@ class SecondScreen extends React.Component {
           }
 
         }}>
+
     
-          <MenuTrigger>
-            <View style={{alignItems: 'center', flexDirection:'row',}}>
+          <MenuTrigger onPress={this.setStatesOnPress}>
+          <View style={{alignItems: 'center', flexDirection:'row',}}>
 
-            <Feather name='menu' size={25} onPress={()=> this.props.navigation.openDrawer()} style={{marginRight: '8%',}}/>
-
+          <Feather name='menu' size={25} onPress={()=> this.props.navigation.openDrawer()} style={{marginRight: '8%', }}/>
             <View style={{alignItems:'center'}}>
             <Card
               style={{
@@ -426,48 +456,58 @@ class SecondScreen extends React.Component {
 
 
 
-          {whichMotivationalMessage===1 &&
+          {whichMotivationalMessage==1 &&
           <View style={{alignItems: 'center', justifyContent: 'center',}}>
-            <Text style={{paddingVertical:75, fontSize: 75, fontFamily: 'best-font', width: 300}} onPress={() => navigate('Home')}>What will you achieve today?</Text>
+            <Text style={{paddingVertical:75, fontSize: 75, fontFamily: 'best-font', width: 300}}>What will you achieve today?</Text>
           </View>}
 
-          {whichMotivationalMessage===2 &&
+          {whichMotivationalMessage==2 &&
           <View style={{alignItems: 'center', justifyContent: 'center',}}>
-            <Text style={{paddingVertical:75, fontSize: 75 , fontFamily: 'best-font', width: 300}} onPress={() => navigate('Home')}>You got it!</Text>
+            <Text style={{paddingVertical:75, fontSize: 75 , fontFamily: 'best-font', width: 300}}>You got it!</Text>
           </View>}
 
-          {whichMotivationalMessage===3 &&
+          {whichMotivationalMessage==3 &&
           <View style={{alignItems: 'center', justifyContent: 'center',}}>
-            <Text style={{paddingVertical:75, fontSize: 75, fontFamily: 'best-font',width: 300}} onPress={() => navigate('Home')}>Trust the process.</Text>
+            <Text style={{paddingVertical:75, fontSize: 75, fontFamily: 'best-font',width: 300}}>Trust the process.</Text>
           </View>}
 
 
 
           <MenuOptions>
-            {wantCoding === true &&
+            {this.state["coding"] == true ?
             <MenuOption value={"Coding"}>
               <Text style={styles.menuContent}>Coding</Text>
-            </MenuOption>}
+            </MenuOption>: null}
 
-            {wantCooking === true &&
+            {this.state["cooking"] == true ?
             <MenuOption value={"Cooking"}>
               <Text style={styles.menuContent}>Cooking</Text>
-            </MenuOption>}
+            </MenuOption>: null}
 
-            {wantInstrument === true &&
+            {this.state["instrument"] == true ?
             <MenuOption value={"Playing an Instrument"}>
               <Text style={styles.menuContent}>Playing an Instrument</Text>
-            </MenuOption>}
+            </MenuOption>: null}
 
-            {wantLanguage === true &&
+            {this.state["language"] == true ?
             <MenuOption value={"Learning a Language"}>
               <Text style={styles.menuContent}>Learning a Language</Text>
-            </MenuOption>}
+            </MenuOption>: null}
 
-            {wantOther === true &&
+            {this.state["other"] == true ?
             <MenuOption value={usersChoice}>
               <Text style={styles.menuContent}>{usersChoice}</Text>
-            </MenuOption>}
+            </MenuOption>: null}
+
+            {this.state["other2"] == true ?
+            <MenuOption value={usersChoice}>
+              <Text style={styles.menuContent}>{usersChoice2}</Text>
+            </MenuOption>: null}
+
+            {this.state["other3"] == true ?
+            <MenuOption value={usersChoice}>
+              <Text style={styles.menuContent}>{usersChoice3}</Text>
+            </MenuOption>: null}
 
           </MenuOptions>
 
@@ -511,7 +551,7 @@ class CookingScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+      <Text onPress={() => navigate('Next')}>This is cooking...Return To Past Screen</Text>
 
       </View>
     );
@@ -574,9 +614,37 @@ class AchievementScreen extends React.Component{
   render() {
     const {navigate} = this.props.navigation;
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text onPress={() => navigate('Home')}>This is achievements...Return To Home Screen</Text>
-
+      <View>
+      <View style={{ flex: 1, alignItems: 'center', }}>
+        <Text style={{fontFamily: 'best-font'}} onPress={() => navigate('Home')}>Achievements</Text>
+      </View>
+      <View>
+        <MaterialIcons size={25} name='computer' color='#cd7f32'/>
+      </View>
+      <View>
+        <MaterialIcons size={25} name='computer' color='#c0c0c0'/>
+      </View>
+      <View>
+        <MaterialIcons size={25} name='computer' color='#E5BB33'/>
+      </View>
+      <View>
+        <MaterialCommunityIcons size={25} name='chef-hat' color='#cd7f32'/>
+      </View>
+      <View>
+        <MaterialCommunityIcons size={25} name='chef-hat' color='#c0c0c0'/>
+      </View>
+      <View>
+        <MaterialCommunityIcons size={25} name='chef-hat' color='#e5bb33'/>
+      </View>
+      <View>
+        <FontAwesome5 size={25} name='guitar' color='#cd7f32'/>
+      </View>
+      <View>
+        <FontAwesome5 size={25} name='guitar' color='#c0c0c0'/>
+      </View>
+      <View>
+        <FontAwesome5 size={25} name='guitar' color='#e5bb33'/>
+      </View>
       </View>
     );
   }}
@@ -588,7 +656,7 @@ const styles = StyleSheet.create({
   menuContent: {
   color: "#000",
   padding: 2,
-  fontSize: 15, fontFamily: 'best-font'
+  fontSize:14, fontFamily: 'best-font'
 }
 });
 
@@ -620,7 +688,7 @@ const DrawerNavigator = createDrawerNavigator({
     labelStyle: {
       fontFamily: 'best-font',
       fontWeight: 'normal',
-      fontSize: 15,
+      fontSize:14,
     },
   },
 }
@@ -764,7 +832,7 @@ else {
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
-            <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Here you can choose more activities
+            <Text style={{fontSize:14., fontFamily: 'best-font',}}>Here you can choose more activities
              that you would like to take up that
             you may not have chosen initially. You can also add up to three custom activities.</Text>
           </CardItem>
@@ -774,7 +842,7 @@ else {
             onPress={() => this.whichPressed("one")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Coding</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Coding</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -782,7 +850,7 @@ else {
             onPress={() => this.whichPressed("two")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Cooking</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Cooking</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -790,7 +858,7 @@ else {
             onPress={() => this.whichPressed("three")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Playing an Instrument</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Playing an Instrument</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -798,7 +866,7 @@ else {
             onPress={() => this.whichPressed("four")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Learning a Language</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Learning a Language</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -806,7 +874,7 @@ else {
             onPress={() => this.whichPressed("five")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
             placeholder= 'Other: enter another activity!' onChangeText={TextInputValue=>this.setState({TextInputValue})}/>
           </CardItem>
 
@@ -815,7 +883,7 @@ else {
             onPress={() => this.whichPressed("six")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
             placeholder= 'Other: enter another activity!' onChangeText={TextInputValue2=>this.setState({TextInputValue2})}/>
           </CardItem>
 
@@ -824,7 +892,7 @@ else {
             onPress={() => this.whichPressed("seven")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
             placeholder= 'Other: enter another activity!' onChangeText={TextInputValue3=>this.setState({TextInputValue3})}/>
           </CardItem>
 
@@ -903,7 +971,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 300, backgroundColor: '#eff9e7'}}>
-            <Text style={{fontSize: 15., fontFamily: 'best-font',}}>Here you can choose more activities
+            <Text style={{fontSize:14., fontFamily: 'best-font',}}>Here you can choose more activities
              that you would like to take up that
             you may not have chosen initially. You can also add up to three custom activities.</Text>
           </CardItem>
@@ -913,7 +981,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
             onPress={() => this.whichPressed("one2")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Coding</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Coding</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -921,7 +989,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
             onPress={() => this.whichPressed("two2")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Cooking</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Cooking</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -929,7 +997,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
             onPress={() => this.whichPressed("three2")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Playing an Instrument</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Playing an Instrument</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -937,7 +1005,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
             onPress={() => this.whichPressed("four2")}
             style={{marginRight:20}}
             />
-            <Text style={{fontSize: 15., fontFamily: 'best-font'}}>Learning a Language</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font'}}>Learning a Language</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -945,7 +1013,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
             onPress={() => this.whichPressed("five2")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
             placeholder= 'Other: enter another activity!' onChangeText={TextInputValue1=>this.setState({TextInputValue1})}/>
           </CardItem>
 
@@ -954,7 +1022,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
             onPress={() => this.whichPressed("six2")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
             placeholder= 'Other: enter another activity!' onChangeText={TextInputValue2=>this.setState({TextInputValue2})}/>
           </CardItem>
 
@@ -963,7 +1031,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
             onPress={() => this.whichPressed("seven2")}
             style={{marginRight:20}}
             />
-            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize: 15., fontFamily: 'best-font'}}
+            <TextInput style={{borderWidth: 1, borderColor: '#777', paddingHorizontal: 8 , width:210, fontSize:14., fontFamily: 'best-font'}}
             placeholder= 'Other: enter another activity!' onChangeText={TextInputValue3=>this.setState({TextInputValue3})}/>
           </CardItem>
 

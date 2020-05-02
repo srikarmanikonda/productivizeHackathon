@@ -16,8 +16,8 @@ export default function AdvButton({ text, onPress }){
 const styles = StyleSheet.create({
     button:{
         borderRadius: 8,
-        paddingVertical: 15,
-        paddingHorizontal: 15,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
         backgroundColor: '#74b53d',
     },
     buttonText:{
