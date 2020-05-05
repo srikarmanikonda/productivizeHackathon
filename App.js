@@ -1530,7 +1530,7 @@ var otherlog = 0
                }
              }/>
         </View>:<View style={{marginBottom: '100%'}}>
-          <FontAwesome5 size={51} name='guitar' color='#ff'/>
+          <FontAwesome5 size={51} name='guitar' color='#fff'/>
         </View>}
         </View>
 
@@ -1651,59 +1651,7 @@ var otherlog = 0
       );
     }}
 
-    class Logbook extends React.Component{
-      static navigationOptions  = {
-        title:'Journal/Log'
-      }
-      render() {
-        const {navigate} = this.props.navigation;
-        this.state = {
-          writer:''
-        }
 
-        return (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <StatusBar hidden/>
-            <LinearGradient
-          colors = {['#fff','#95d65e']}
-          style={{
-                     position: 'absolute',
-                     left: 0,
-                     right: 0,
-                     top: 0,
-                     height: "100%",
-                   }}
-           />
-           <View style = {{width:"90%",
-           backgroundColor:"#fff",
-           borderRadius:25,
-           height:"85%",
-           marginBottom:"10%",
-           justifyContent:"center",
-           padding:20,
-           top:"1%"}}>
-
-          <TextInput
-              style={{ height:50,
-             color:"black",
-             top:"-49%"}}
-              placeholder = "Begin writing about your experiences here..."
-              placeholderTextColor="silver"
-              onChangeText={writer => this.setState({writer })
-           }
-
-         />
-
-         <AdvButton text="Save!" onPress={() => {
-           whatsWrittenInJournal=this.state.writer;
-           if (whatsWrittenInJournal.length>=10){
-             hasWrittenInJournal=true;
-           }
-           }}/>
-
-          </View>
-          </View>
-   }
    class Logbook extends React.Component{
      static navigationOptions  = {
        title:'Journal/Log'
@@ -1744,7 +1692,15 @@ var otherlog = 0
              onChangeText={writer => this.setState({writer })}
 
         />
+
+                 <AdvButton text="Save!" onPress={() => {
+                   whatsWrittenInJournal=this.state.writer;
+                   if (whatsWrittenInJournal.length>=10){
+                     hasWrittenInJournal=true;
+                   }
+                   }}/>
          </View>
+
          </View>
        );
      }
@@ -1822,6 +1778,9 @@ var otherlog = 0
 Statslol:{
   screen:Statsscreen
 },
+Coding:{
+  screen:CodingScreen
+}
 
  }, {
    contentComponent: CustomDrawerComponent,
