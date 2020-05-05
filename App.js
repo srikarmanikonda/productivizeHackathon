@@ -484,7 +484,7 @@
          }}>
  
      
-           <MenuTrigger /* onPress={this.setStatesOnPress} */>
+           <MenuTrigger onPress={this.setStatesOnPress}>
            <View style={{alignItems: 'center', flexDirection:'row',}}>
  
            <Feather name='menu' size={24.999999} onPress={()=> this.props.navigation.openDrawer()} style={{marginRight: '8%', }}/>
