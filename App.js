@@ -34,6 +34,15 @@ import React, {Component, useState} from 'react';
  var wantOther3;
 
  var whichMotivationalMessage;
+ var triedCoding;
+ var triedCooking;
+ var triedLanguage;
+ var triedInstrument;
+ var triedOther;
+
+ var countUpIfTrue;
+ var hasWrittenInJournal;
+ var whatsWrittenInJournal;
  var codelog = 0
  var cooklog = 0
  var instrumentlog = 0
