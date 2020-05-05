@@ -435,8 +435,8 @@ var otherlog = 0
          }}>
 
 
- 
-     
+
+
            <MenuTrigger onPress={this.setStatesOnPress}>
            <View style={{alignItems: 'center', flexDirection:'row',}}>
 
@@ -1094,79 +1094,607 @@ var otherlog = 0
  }
 
  class AchievementScreen extends React.Component{
-   static navigationOptions  = {
-     title:'Achievement'
+   constructor(props){
+     super(props);
+     this.state={
+       jackOfAllTradesAch:false,
+       journalAch: false,
+       fiveUnlockedAch:false,
+       tenUnlockedAch:false,
+
+       codingAch1:false,
+       codingAch2:false,
+       codingAch3:false,
+       cookingAch1:false,
+       cookingAch2:false,
+       cookingAch3:false,
+       instrumentAch1:false,
+       instrumentAch2:false,
+       instrumentAch3:false,
+       languageAch1:false,
+       languageAch2:false,
+       languageAch3:false,
+       otherAch1:false,
+       otherAch2:false,
+       otherAch3:false,
+
+
+     }
    }
-   render() {
-     const {navigate} = this.props.navigation;
-     return (
-       <View>
-       <View style={{ flex: 1, alignItems: 'center', }}>
-         <Text style={{fontFamily: 'best-font'}} onPress={() => navigate('Home')}>Achievements</Text>
-       </View>
-       <View>
-         <MaterialIcons size={25} name='computer' color='#cd7f32'/>
-       </View>
-       <View>
-         <MaterialIcons size={25} name='computer' color='#c0c0c0'/>
-       </View>
-       <View>
-         <MaterialIcons size={25} name='computer' color='#E5BB33'/>
-       </View>
+
+   checkJackAch (){
+     var triedVars = [triedCoding, triedCooking, triedLanguage, triedInstrument, triedOther];
+     countUpIfTrue=0;
+     var i;
+     for (i = 0; i < 5; i++) {
+       if (triedVars[i]==true) {
+         countUpIfTrue++;
+       }
+     }
+     console.log(countUpIfTrue);
+     if (countUpIfTrue>=4){
+       this.setState({jackOfAllTradesAch: true});
+     }
+   }
+
+   checkJournalAch(){
+     if (hasWrittenInJournal==true){
+       this.setState({journalAch: true});
+     }
+   }
+
+   checkFiveAch(){
+     var checkAllAch = [this.state.jackOfAllTradesAch, this.state.journalAch, this.state.fiveUnlockedAch, this.state.tenUnlockedAch, this.state.codingAch1, this.state.codingAch2, this.state.codingAch3, this.state.cookingAch1, this.state.cookingAch2, this.state.cookingAch3, this.state.instrumentAch1, this.state.instrumentAch2, this.state.instrumentAch3, this.state.languageAch1, this.state.languageAch2, this.state.languageAch3, this.state.otherAch1, this.state.otherAch2, this.state.otherAch3];
+     countUpIfTrue=0;
+     var i;
+     for (i = 0; i < checkAllAch.length; i++) {
+       if (checkAllAch[i]==true) {
+         countUpIfTrue++;
+       }
+     }
+     console.log(countUpIfTrue);
+     if (countUpIfTrue>=5){
+       this.setState({fiveUnlockedAch: true});
+     }
+   }
+
+   checkTenAch(){
+     var checkAllAch = [this.state.jackOfAllTradesAch, this.state.journalAch, this.state.fiveUnlockedAch, this.state.tenUnlockedAch, this.state.codingAch1, this.state.codingAch2, this.state.codingAch3, this.state.cookingAch1, this.state.cookingAch2, this.state.cookingAch3, this.state.instrumentAch1, this.state.instrumentAch2, this.state.instrumentAch3, this.state.languageAch1, this.state.languageAch2, this.state.languageAch3, this.state.otherAch1, this.state.otherAch2, this.state.otherAch3];
+     countUpIfTrue=0;
+     var i;
+     for (i = 0; i < checkAllAch.length; i++) {
+       if (checkAllAch[i]==true) {
+         countUpIfTrue++;
+       }
+     }
+     console.log(countUpIfTrue);
+     if (countUpIfTrue>=10){
+       this.setState({tenUnlockedAch: true});
+     }
+   }
+
+   checkBronzeGoldSilverAch(){
+     if (codelog>=10){
+       this.setState({codingAch1: true});
+     }
+     if (codelog>=30){
+       this.setState({codingAch2: true});
+     }
+     if (codelog>=60){
+       this.setState({codingAch3: true});
+     }
+
+
+     if (cooklog>=10){
+       this.setState({cookingAch1: true});
+     }
+     if (cooklog>=30){
+       this.setState({cookingAch2: true});
+     }
+     if (cooklog>=60){
+       this.setState({cookingAch3: true});
+     }
+
+
+     if (instrumentlog>=10){
+       this.setState({instrumentAch1: true});
+     }
+     if (instrumentlog>=30){
+       this.setState({instrumentAch2: true});
+     }
+     if (instrumentlog>=60){
+       this.setState({instrumentAch3: true});
+     }
+
+
+     if (languagelog>=10){
+       this.setState({languageAch1: true});
+     }
+     if (languagelog>=30){
+       this.setState({languageAch2: true});
+     }
+     if (languagelog>=60){
+       this.setState({languageAch3: true});
+     }
+
+
+     if (otherlog>=10){
+       this.setState({otherAch1: true});
+     }
+     if (otherlog>=30){
+       this.setState({otherAch2: true});
+     }
+     if (otherlog>=60){
+       this.setState({otherAch3: true});
+     }
+   }
+
+   setAchievementsOnPress = () => {
+     this.checkJackAch();
+     this.checkJournalAch();
+     this.checkFiveAch();
+     this.checkTenAch();
+     this.checkBronzeGoldSilverAch();
+   }
+
+    static navigationOptions  = {
+      title:'Achievement'
+    }
+    render() {
+      const {navigate} = this.props.navigation;
+      return (
+        <View style={{}}>
+          <StatusBar hidden/>
+
+         <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+
+          <View>
+           <Feather name='menu' size={24.999999} onPress={()=> this.props.navigation.openDrawer()} style={{marginLeft: '25%', marginTop: '26%'}}/>
+          </View>
+
+         <View style={{ flex: 1, alignItems: 'center', marginTop: '7.5%', marginLeft: '-16.5%'}}>
+          <Text style={{fontFamily: 'best-font', fontSize: 30}}>Achievements</Text>
+         </View>
+
+         <View style={{marginRight: '5%', marginTop: '7%'}}>
+           <AdvButton text={
+             <Feather name='refresh-cw' size={20} onPress={()=>this.setAchievementsOnPress()}/>
+           }/>
+          </View>
+
+         </View>
+
+         <View style={{alignItems:'center', justifyContent:'center', marginLeft:'5%', marginRight: '5%', marginTop: '7%'}}>
+           <Card>
+             <CardItem>
+             <Text style={{fontSize: 14, fontFamily: 'best-font'}}>
+                 Here you will see the achievements you unlock as you make progress.
+                 When you unlock a new achievement, an icon will show up. Click an icon
+                 to view the description of the respective achievement.
+             </Text>
+             </CardItem>
+           </Card>
+         </View>
+
+
+       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:'9%'}}>
+
+       {this.statejackOfAllTradesAch==true?
+       <View style={{marginRight:'5%'}}>
+          <FontAwesome5 size={67} name='suitcase' color='#73c332' onPress={()=>
+               {Alert.alert(
+                 "Jack of All Trades",
+                 "Tried 4 or more activities!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }
+             />
+        </View>:
+        <View style={{marginRight:'5%'}}>
+        <FontAwesome5 size={67} name='suitcase' color='#fff'/>
+      </View>
+    }
+
+       {this.state.journalAch==true?
+        <View style={{marginRight:'3%'}}>
+          <Ionicons size={67} name='ios-journal' color='#73c332' onPress={()=>
+               {Alert.alert(
+                 "Dear Diary",
+                 "Made a journal entry!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:
+        <View style={{marginRight:'3%'}}>
+         <Ionicons size={67} name='ios-journal' color='#fff'/>
+       </View>}
+
+
+         {this.state.fiveUnlockedAch==true?
+        <View style={{marginRight:'1%'}}>
+          <MaterialCommunityIcons size={67} name='dice-5' color='#73c332' onPress={()=>
+               {Alert.alert(
+                 "5 Stars",
+                 "Unlocked 5 achievements!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginRight:'1%'}}>
+          <MaterialCommunityIcons size={67} name='dice-5' color='#fff'/>
+        </View>}
+
+           {this.state.tenUnlockedAch==true?
+        <View style={{}}>
+          <MaterialCommunityIcons size={67} name='dice-d10' color='#73c332' onPress={()=>
+               {Alert.alert(
+                 "Alexander Hamilton",
+                 "Unlocked 10 achievements!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{}}>
+          <MaterialCommunityIcons size={67} name='dice-d10' color='#fff'/>
+        </View>}
+
+        </View>
+
+         <View style={{marginRight: '0.8%', marginLeft: '0.8%', flexDirection:'row', alignItems:'center', justifyContent: 'space-around', marginTop: '14.75%'}}>
+
+          <View>
+            {this.state.codingAch1==true?
+           <View style={{marginBottom: '100%'}}>
+             <MaterialIcons size={51} name='computer' color='#cd7f32' onPress={()=>
+               {Alert.alert(
+                 "Hello World",
+                 "Spent one hour practicing coding!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+           </View>:<View style={{marginBottom: '100%'}}>
+             <MaterialIcons size={51} name='computer' color='#fff' />
+           </View>
+    }
+
+           {this.state.codingAch2==true?
+           <View  style={{marginBottom: '100%'}}>
+             <MaterialIcons size={51} name='computer' color='#c0c0c0' onPress={()=>
+               {Alert.alert(
+                 "Java The Hutt",
+                 "Spent five hours practicing coding!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+           </View>:<View  style={{marginBottom: '100%'}}>
+             <MaterialIcons size={51} name='computer' color='#fff'/>
+           </View>}
+
+
+           {this.state.codingAch3==true?
+           <View style={{marginBottom: '100%'}}>
+             <MaterialIcons size={51} name='computer' color='#E5BB33' onPress={()=>
+               {Alert.alert(
+                 "Turing Machine",
+                 "Spent ten hours practicing coding!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+           </View>:
+           <View style={{marginBottom: '100%'}}>
+             <MaterialIcons size={51} name='computer' color='#fff'/>
+           </View>
+           }
+         </View>
+
 
        <View>
-         <MaterialCommunityIcons size={25} name='chef-hat' color='#cd7f32'/>
-       </View>
+
+         {this.state.cookingAch1==true?
+        <View style={{marginBottom: '100%'}}>
+          <MaterialCommunityIcons size={51} name='chef-hat' color='#cd7f32' onPress={()=>
+               {Alert.alert(
+                 "Ramen Expert",
+                 "Spent one hour practicing cooking!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <MaterialCommunityIcons size={51} name='chef-hat' color='#fff'/>
+        </View>
+    }
+
+       {this.state.cookingAch2==true?
+        <View style={{marginBottom: '100%'}}>
+          <MaterialCommunityIcons size={51} name='chef-hat' color='#c0c0c0' onPress={()=>
+               {Alert.alert(
+                 "3-Course Cook",
+                 "Spent five hours practicing cooking!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <MaterialCommunityIcons size={51} name='chef-hat' color='#fff'/>
+        </View>
+    }
+
+    {this.state.cookingAch3=true?
+        <View style={{marginBottom: '100%'}}>
+          <MaterialCommunityIcons size={51} name='chef-hat' color='#e5bb33' onPress={()=>
+               {Alert.alert(
+                 "Gordon Ramsay",
+                 "Spent ten hours practicing cooking!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <MaterialCommunityIcons size={51} name='chef-hat' color='#fff'/>
+        </View>}
+        </View>
+
        <View>
-         <MaterialCommunityIcons size={25} name='chef-hat' color='#c0c0c0'/>
-       </View>
-       <View>
-         <MaterialCommunityIcons size={25} name='chef-hat' color='#e5bb33'/>
-       </View>
+
+         {this.state.instrumentAch1==true?
+        <View style={{marginBottom: '100%'}}>
+          <FontAwesome5 size={51} name='guitar' color='#cd7f32' onPress={()=>
+               {Alert.alert(
+                 "Hot Cross Buns",
+                 "Spent one hour practicing playing an instrument!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <FontAwesome5 size={51} name='guitar' color='#fff'/>
+        </View>}
+
+        {this.state.instrumentAch2==true?
+
+        <View style={{marginBottom: '100%'}}>
+          <FontAwesome5 size={51} name='guitar' color='#c0c0c0' onPress={()=>
+               {Alert.alert(
+                 "Concierto Candidate",
+                 "Spent five hours practicing playing an instrument!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <FontAwesome5 size={51} name='guitar' color='#fff' />
+           </View> }
+
+       {this.state.instrumentAch3==true?
+        <View style={{marginBottom: '100%'}}>
+          <FontAwesome5 size={51} name='guitar' color='#e5bb33' onPress={()=>
+               {Alert.alert(
+                 "Mozart",
+                 "Spent ten hours practicing playing an instrument!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <FontAwesome5 size={51} name='guitar' color='#ff'/>
+        </View>}
+        </View>
+
+        <View>
+
+         {this.state.languageAch1==true?
+        <View  style={{marginBottom: '100%'}}>
+          <Entypo size={51} name='language' color='#cd7f32' onPress={()=>
+               {Alert.alert(
+                 "¡Muy bien!",
+                 "Spent one hour learning a language!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:
+        <View  style={{marginBottom: '100%'}}>
+        <Entypo size={51} name='language' color='#fff' />
+      </View>}
 
 
-       <View>
-         <FontAwesome5 size={25} name='guitar' color='#cd7f32'/>
-       </View>
-       <View>
-         <FontAwesome5 size={25} name='guitar' color='#c0c0c0'/>
-       </View>
-       <View>
-         <FontAwesome5 size={25} name='guitar' color='#e5bb33'/>
-       </View>
-       <View>
-         <Entypo size={25} name='language' color='#cd7f32'/>
-       </View>
-       <View>
-         <Entypo size={25} name='language' color='#c0c0c0'/>
-       </View>
-       <View>
-         <Entypo size={25} name='language' color='#e5bb33'/>
-       </View>
-       <View>
-         <Feather size={25} name='book-open' color='#cd7f32'/>
-       </View>
-       <View>
-         <Feather size={25} name='book-open' color='#c0c0c0'/>
-       </View>
-       <View>
-         <Feather size={25} name='book-open' color='#e5bb33'/>
-       </View>
-       <View>
-         <FontAwesome5 size={50} name='suitcase'/>
-       </View>
-       <View>
-         <Ionicons size={50} name='ios-journal'/>
-       </View>
-       <View>
-         <MaterialCommunityIcons size={50} name='dice-5'/>
-       </View>
-       <View>
-         <MaterialCommunityIcons size={50} name='dice-d10'/>
-       </View>
-       </View>
-     );
-   }}
+      {this.state.languageAch2==true?
+        <View style={{marginBottom: '100%'}}>
+          <Entypo size={51} name='language' color='#c0c0c0' onPress={()=>
+               {Alert.alert(
+                 "很好！",
+                 "Spent five hours learning a language!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <Entypo size={51} name='language' color='#fff'/>
+        </View>}
+
+         {this.state.languageAch3==true?
+        <View style={{marginBottom: '100%'}}>
+          <Entypo size={51} name='language' color='#e5bb33' onPress={()=>
+               {Alert.alert(
+                 "Translator",
+                 "Spent ten hours learning a language!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:
+        <View style={{marginBottom: '100%'}}>
+        <Entypo size={51} name='language' color='#e5bb33'/>
+      </View>}
+        </View>
+
+        <View>
+
+         {this.state.otherAch1==true?
+        <View style={{marginBottom: '100%'}}>
+          <Feather size={51} name='book-open' color='#cd7f32' onPress={()=>
+               {Alert.alert(
+                 "Above and Beyond",
+                 "Spent one hour doing activities of your own selection!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <Feather size={51} name='book-open' color='#fff'/>
+        </View>}
+
+
+         {this.state.otherAch2==true?
+        <View style={{marginBottom: '100%'}}>
+          <Feather size={51} name='book-open' color='#c0c0c0' onPress={()=>
+               {Alert.alert(
+                 "Committed",
+                 "Spent five hours doing activities of your own selection!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <Feather size={51} name='book-open' color='#fff'/>
+        </View>}
+
+         {this.state.otherAch3==true?
+        <View style={{marginBottom: '100%'}}>
+          <Feather size={51} name='book-open' color='#e5bb33' onPress={()=>
+               {Alert.alert(
+                 "Ultra-achiever",
+                 "Spent ten hours doing activities of your own selection!",
+                 [
+                   { text: "OK", }
+                 ],
+                 { cancelable: true }
+               );
+               }
+             }/>
+        </View>:<View style={{marginBottom: '100%'}}>
+          <Feather size={51} name='book-open' color='#fff'/>
+        </View>}
+
+        </View>
+        </View>
+        </View>
+      );
+    }}
+
+    class Logbook extends React.Component{
+      static navigationOptions  = {
+        title:'Journal/Log'
+      }
+      render() {
+        const {navigate} = this.props.navigation;
+        this.state = {
+          writer:''
+        }
+
+        return (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <StatusBar hidden/>
+            <LinearGradient
+          colors = {['#fff','#95d65e']}
+          style={{
+                     position: 'absolute',
+                     left: 0,
+                     right: 0,
+                     top: 0,
+                     height: "100%",
+                   }}
+           />
+           <View style = {{width:"90%",
+           backgroundColor:"#fff",
+           borderRadius:25,
+           height:"85%",
+           marginBottom:"10%",
+           justifyContent:"center",
+           padding:20,
+           top:"1%"}}>
+
+          <TextInput
+              style={{ height:50,
+             color:"black",
+             top:"-49%"}}
+              placeholder = "Begin writing about your experiences here..."
+              placeholderTextColor="silver"
+              onChangeText={writer => this.setState({writer })
+           }
+
+         />
+
+         <AdvButton text="Save!" onPress={() => {
+           whatsWrittenInJournal=this.state.writer;
+           if (whatsWrittenInJournal.length>=10){
+             hasWrittenInJournal=true;
+           }
+           }}/>
+
+          </View>
+          </View>
+   }
    class Logbook extends React.Component{
      static navigationOptions  = {
        title:'Journal/Log'
