@@ -435,6 +435,8 @@ var otherlog = 0
          }}>
 
 
+ 
+     
            <MenuTrigger onPress={this.setStatesOnPress}>
            <View style={{alignItems: 'center', flexDirection:'row',}}>
 
