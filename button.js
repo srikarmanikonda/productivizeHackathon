@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
 
-export default function AdvButton({ text, onPress }){
+export default function AdvButton({ text, onPress, icon }){
     return (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} icon={icon}>
             <View style={styles.button}>
                 <Text style={styles.buttonText}>
                     { text }
