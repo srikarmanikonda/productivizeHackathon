@@ -24,6 +24,7 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 //fix content screens
 //fix journal format
 //add logo without "productivize" string in more activities?
+//fix timer so can't exit when recording or paused
 
 
 
@@ -52,6 +53,32 @@ var triedOther=false;
 var countUpIfTrue;
 var hasWrittenInJournal;
 var whatsWrittenInJournal;
+
+var codelog = 0
+var cooklog = 0
+var instrumentlog = 0
+var languagelog = 0
+var otherlog = 0
+
+var jack=false;
+var journal=false;
+var five=false;
+var ten=false;
+var code1=false;
+var code2=false;
+var code3=false;
+var cook1=false;
+var cook2 = false;
+var cook3=false;
+var lan1=false;
+var lan2=false;
+var lan3=false;
+var inst1=false;
+var inst2=false;
+var inst3=false;
+var ot1=false;
+var ot2=false;
+var ot3=false;
 
 
 let customFonts = {
@@ -322,7 +349,7 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
         <Card style={{backgroundColor: '#eff9e7'}}>
 
           <CardItem header style={{width: 299.999999999, backgroundColor: '#eff9e7'}}>
-            <Text style={{fontSize:14., fontFamily: 'best-font',}}>Here you can select more skills or uncheck ones you have already selected. You can add custom activities as well (up to 3).</Text>
+            <Text style={{fontSize:14., fontFamily: 'best-font',}}>Here you can select additional skills or uncheck ones you have already selected. You can add custom activities as well.</Text>
           </CardItem>
 
           <CardItem body style={{backgroundColor: '#eff9e7'}}>
@@ -415,6 +442,9 @@ class MoreActivitiesThanInitiallyScreen extends React.Component {
             triedOther=true;
           }
           }
+          console.log(wantCoding);
+          console.log(wantCooking);
+          console.log(wantInstrument);
         }}/>
 
         </View>
@@ -528,14 +558,10 @@ class SecondScreen extends React.Component {
             </View>
           </MenuTrigger>
           
-          <View style={{marginTop:'3%'}}>
-          <Card>
-            <CardItem style={{backgroundColor: '#e9f7de'}}>
+          <View style={{marginTop:'10%',}}>
               <Text style={{fontFamily:'best-font', textAlign:'center'}}>
                 Stay focused on your goals and passions, and have fun at the same time. The results will come naturally.
               </Text>
-            </CardItem>
-          </Card>
           </View>
 
 
@@ -712,11 +738,11 @@ class SecondScreen extends React.Component {
     }
 }
 
-
 class CodingScreen extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+             hour:0,
              min: 0,
              sec: 0,
              msec: 0
@@ -747,11 +773,22 @@ class CodingScreen extends React.Component{
                         msec: 0,
                         sec: ++this.state.sec
                     });
-                } else {
+                }
+
+                else if (this.state.min !== 59) {
+                    this.setState({
+                        msec:0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+
+                 else {
                     this.setState({
                         msec: 0,
                         sec: 0,
-                        min: ++this.state.min
+                        min:0,
+                        hour: ++this.state.hour
                     });
                 }
             }, 1);
@@ -762,9 +799,11 @@ class CodingScreen extends React.Component{
     };
 
     handleReset = () => {
-      if(this.state.sec >0){
+      if(this.state.sec >=0){
+        codelog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        console.log(codelog)
         Alert.alert("Thanks for practicing!",
-          'you have been practicing for ' + this.state.sec + ' ' + 'seconds')
+          'you have been practicing for ' + this.state.hour + ' hours  ' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
         this.setState({
             min: 0,
             sec: 0,
@@ -781,7 +820,6 @@ class CodingScreen extends React.Component{
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <StatusBar hidden/>
       <LinearGradient
       colors = {['#fff','#95d65e']}
       style={{
@@ -792,8 +830,15 @@ class CodingScreen extends React.Component{
                  height: "100%",
                }}
       />
+      <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
+
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning coding, one of the most revolutionary hobbies in the world that combines technology and critical thinking!</Text>
+        </CardItem>
+        </Card>
+
       <WebView
-        style={{height: "22.5%", width: 225, marginVertical: "70%", bottom:"12%" }}
+        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
         javaScriptEnabled={true}
         startInLoadingState={true}
 
@@ -801,14 +846,16 @@ class CodingScreen extends React.Component{
         source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
 
       />
+      <Button onPress={()=>{navigate('Next')}}/>
       <Button
-      style = {{top:"-180%"}}
+      style = {{top:"-150%",backgroundColor:'#74b53d'}}
       title = {!this.state.start? 'Start time': 'Pause Activity'}
       onPress = {this.handleToggle
       }
       />
       <Button
-      style = {{top:"-100%",bottom:"15%"}}
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+
       title = {'Stop and Log'}
       onPress = {this.handleReset
       }
@@ -824,14 +871,85 @@ class CodingScreen extends React.Component{
   }
 
 class CookingScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+             hour:0,
+             min: 0,
+             sec: 0,
+             msec: 0
+         }
+  }
   static navigationOptions  = {
     title:'Cooking'
   }
+  handleToggle = () => {
+        this.setState(
+            {
+                start: !this.state.start
+            },
+            () => this.handleStart()
+        );
+    };
+
+
+    handleStart = () => {
+        if (this.state.start) {
+            this.interval = setInterval(() => {
+                if (this.state.msec !== 100) {
+                    this.setState({
+                        msec: this.state.msec + 2
+                    });
+                } else if (this.state.sec !== 59) {
+                    this.setState({
+                        msec: 0,
+                        sec: ++this.state.sec
+                    });
+                }
+
+                else if (this.state.min !== 59) {
+                    this.setState({
+                        msec:0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+
+                 else {
+                    this.setState({
+                        msec: 0,
+                        sec: 0,
+                        min:0,
+                        hour: ++this.state.hour
+                    });
+                }
+            }, 1);
+
+        } else {
+            clearInterval(this.interval);
+        }
+    };
+
+    handleReset = () => {
+      if(this.state.sec >=0){
+        cooklog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        console.log(codelog)
+        Alert.alert("Thanks for practicing!",
+          'you have been practicing for ' + this.state.hour + " " + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        this.setState({
+            min: 0,
+            sec: 0,
+            msec: 0,
+
+            start: false
+        });
+        clearInterval(this.interval);
+}
+    };
   render() {
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <StatusBar hidden/>
       <LinearGradient
       colors = {['#fff','#95d65e']}
       style={{
@@ -842,7 +960,36 @@ class CookingScreen extends React.Component{
                  height: "100%",
                }}
       />
-      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+      <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
+
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning cooking and become a food conniseur!</Text>
+        </CardItem>
+        </Card>
+
+      <WebView
+        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/9_5wHw6l11o' }}
+
+      />
+      <Button
+      style = {{top:"-150%",backgroundColor:'#74b53d'}}
+      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      onPress = {this.handleToggle
+      }
+      />
+      <Button
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+
+      title = {'Stop and Log'}
+      onPress = {this.handleReset
+      }
+      />
+
 
       </View>
     );
@@ -851,14 +998,85 @@ class CookingScreen extends React.Component{
 }
 
 class InstrumentScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+             hour:0,
+             min: 0,
+             sec: 0,
+             msec: 0
+         }
+  }
   static navigationOptions  = {
     title:'Instrument'
   }
+  handleToggle = () => {
+        this.setState(
+            {
+                start: !this.state.start
+            },
+            () => this.handleStart()
+        );
+    };
+
+
+    handleStart = () => {
+        if (this.state.start) {
+            this.interval = setInterval(() => {
+                if (this.state.msec !== 100) {
+                    this.setState({
+                        msec: this.state.msec + 2
+                    });
+                } else if (this.state.sec !== 59) {
+                    this.setState({
+                        msec: 0,
+                        sec: ++this.state.sec
+                    });
+                }
+
+                else if (this.state.min !== 59) {
+                    this.setState({
+                        msec:0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+
+                 else {
+                    this.setState({
+                        msec: 0,
+                        sec: 0,
+                        min:0,
+                        hour: ++this.state.hour
+                    });
+                }
+            }, 1);
+
+        } else {
+            clearInterval(this.interval);
+        }
+    };
+
+    handleReset = () => {
+      if(this.state.sec >=0){
+        cooklog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        console.log(codelog)
+        Alert.alert("Thanks for practicing!",
+          'you have been practicing for ' + this.state.hour + " " + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        this.setState({
+            min: 0,
+            sec: 0,
+            msec: 0,
+
+            start: false
+        });
+        clearInterval(this.interval);
+}
+    };
   render() {
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <StatusBar hidden/>
       <LinearGradient
       colors = {['#fff','#95d65e']}
       style={{
@@ -869,7 +1087,36 @@ class InstrumentScreen extends React.Component{
                  height: "100%",
                }}
       />
-      <Text onPress={() => navigate('Home')}>This is instrument...Return To Home Screen</Text>
+      <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
+
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning a new instrument and become the next Yo-Yo Ma or Louis armstrong!</Text>
+        </CardItem>
+        </Card>
+
+      <WebView
+        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/qZIeVsnTDmI' }}
+
+      />
+      <Button
+      style = {{top:"-150%",backgroundColor:'#74b53d'}}
+      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      onPress = {this.handleToggle
+      }
+      />
+      <Button
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+
+      title = {'Stop and Log'}
+      onPress = {this.handleReset
+      }
+      />
+
 
       </View>
     );
@@ -878,14 +1125,85 @@ class InstrumentScreen extends React.Component{
 }
 
 class LanguageScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+             hour:0,
+             min: 0,
+             sec: 0,
+             msec: 0
+         }
+  }
   static navigationOptions  = {
     title:'Language'
   }
+  handleToggle = () => {
+        this.setState(
+            {
+                start: !this.state.start
+            },
+            () => this.handleStart()
+        );
+    };
+
+
+    handleStart = () => {
+        if (this.state.start) {
+            this.interval = setInterval(() => {
+                if (this.state.msec !== 100) {
+                    this.setState({
+                        msec: this.state.msec + 2
+                    });
+                } else if (this.state.sec !== 59) {
+                    this.setState({
+                        msec: 0,
+                        sec: ++this.state.sec
+                    });
+                }
+
+                else if (this.state.min !== 59) {
+                    this.setState({
+                        msec:0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+
+                 else {
+                    this.setState({
+                        msec: 0,
+                        sec: 0,
+                        min:0,
+                        hour: ++this.state.hour
+                    });
+                }
+            }, 1);
+
+        } else {
+            clearInterval(this.interval);
+        }
+    };
+
+    handleReset = () => {
+      if(this.state.sec >=0){
+        cooklog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        console.log(codelog)
+        Alert.alert("Thanks for practicing!",
+          'you have been practicing for ' + this.state.hour + " " + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        this.setState({
+            min: 0,
+            sec: 0,
+            msec: 0,
+
+            start: false
+        });
+        clearInterval(this.interval);
+}
+    };
   render() {
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <StatusBar hidden/>
       <LinearGradient
       colors = {['#fff','#95d65e']}
       style={{
@@ -896,7 +1214,36 @@ class LanguageScreen extends React.Component{
                  height: "100%",
                }}
       />
-      <Text onPress={() => navigate('Home')}>This is learning a language screen...Return To Home Screen</Text>
+      <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
+
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning a new language, from Spanish, to Mandarin there are plenty of great resources out there!</Text>
+        </CardItem>
+        </Card>
+
+      <WebView
+        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/CNbklPRdT4Y' }}
+
+      />
+      <Button
+      style = {{top:"-150%",backgroundColor:'#74b53d'}}
+      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      onPress = {this.handleToggle
+      }
+      />
+      <Button
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+
+      title = {'Stop and Log'}
+      onPress = {this.handleReset
+      }
+      />
+
 
       </View>
     );
@@ -912,7 +1259,6 @@ class OtherScreen extends React.Component{
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <StatusBar hidden/>
       <LinearGradient
       colors = {['#fff','#95d65e']}
       style={{
@@ -923,7 +1269,36 @@ class OtherScreen extends React.Component{
                  height: "100%",
                }}
       />
-      <Text onPress={() => navigate('Home')}>This is other screen...Return To Home Screen</Text>
+      <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
+
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning a hobby you shared, one of the most revolutionary hobbies in the world that combines technology and critical thinking!</Text>
+        </CardItem>
+        </Card>
+
+      <WebView
+        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
+
+      />
+      <Button
+      style = {{top:"-150%",backgroundColor:'#74b53d'}}
+      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      onPress = {this.handleToggle
+      }
+      />
+      <Button
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+
+      title = {'Stop and Log'}
+      onPress = {this.handleReset
+      }
+      />
+
 
       </View>
     );
@@ -931,35 +1306,35 @@ class OtherScreen extends React.Component{
 
 }
 
+
+
 class AchievementScreen extends React.Component{
 
  constructor(props){
    super(props);
    this.state={
-     jackOfAllTradesAch: false,
-     journalAch: false,
+     jackOfAllTradesAch: jack,
+     journalAch: journal,
 
-
-     /*
-     fiveUnlockedAch:false,
-     tenUnlockedAch:false,
+     fiveUnlockedAch:five,
+     tenUnlockedAch:ten,
  
-     codingAch1:false,
-     codingAch2:false,
-     codingAch3:false,
-     cookingAch1:false,
-     cookingAch2:false,
-     cookingAch3:false,
-     instrumentAch1:false,
-     instrumentAch2:false,
-     instrumentAch3:false,
-     languageAch1:false,
-     languageAch2:false,
-     languageAch3:false,
-     otherAch1:false,
-     otherAch2:false,
-     otherAch3:false,
-     */
+     codingAch1:code1,
+     codingAch2:code2,
+     codingAch3:code3,
+     cookingAch1:cook1,
+     cookingAch2:cook2,
+     cookingAch3:cook3,
+     instrumentAch1:inst1,
+     instrumentAch2:inst2,
+     instrumentAch3:inst3,
+     languageAch1:lan1,
+     languageAch2:lan2,
+     languageAch3:lan3,
+     otherAch1:ot1,
+     otherAch2:ot2,
+     otherAch3:ot3,
+     
    
 
    }
@@ -977,6 +1352,7 @@ class AchievementScreen extends React.Component{
    }
    console.log(countUpIfTrue);
    if (countUpIfTrue>=4){
+     jack=true;
      this.setState({["jackOfAllTradesAch"]: true});
      console.log("State of Jack Ach: "+this.state.jackOfAllTradesAch)
      console.log("Jack Achievement Unlocked!")
@@ -985,6 +1361,7 @@ class AchievementScreen extends React.Component{
 
  checkJournalAch(){
    if (hasWrittenInJournal==true){
+     journal=true;
      this.setState({journalAch: true});
    }
    console.log(this.state.journalAch);
@@ -1002,6 +1379,7 @@ class AchievementScreen extends React.Component{
    console.log(countUpIfTrue);
    if (countUpIfTrue>=5){
      this.setState({fiveUnlockedAch: true});
+     five=true;
    }
  }
 
@@ -1017,61 +1395,78 @@ class AchievementScreen extends React.Component{
    console.log(countUpIfTrue);
    if (countUpIfTrue>=10){
      this.setState({tenUnlockedAch: true});
+     ten=true;
    }
  }
 
  checkBronzeGoldSilverAch(){
+   console.log("Checking Code Ach - Time is: "+codelog);
    if (codelog>=10){
+    code1=true
      this.setState({codingAch1: true});
    }
    if (codelog>=30){
+    code2=true
      this.setState({codingAch2: true});
    }
    if (codelog>=60){
+    code3=true
      this.setState({codingAch3: true});
    }
 
 
    if (cooklog>=10){
+     cook1=true
      this.setState({cookingAch1: true});
    }
    if (cooklog>=30){
+     cook2=true
      this.setState({cookingAch2: true});
    }
    if (cooklog>=60){
+     cook3=true
      this.setState({cookingAch3: true});
    }
 
 
    if (instrumentlog>=10){
+     inst1=true
      this.setState({instrumentAch1: true});
    }
    if (instrumentlog>=30){
+     inst2=true
      this.setState({instrumentAch2: true});
    }
    if (instrumentlog>=60){
+     inst3=true
      this.setState({instrumentAch3: true});
    }
 
 
    if (languagelog>=10){
+     lan1=true
      this.setState({languageAch1: true});
    }
    if (languagelog>=30){
+     lan2=true
      this.setState({languageAch2: true});
    }
    if (languagelog>=60){
+     lan3=true
      this.setState({languageAch3: true});
    }
 
 
    if (otherlog>=10){
+     ot1=true
      this.setState({otherAch1: true});
    }
    if (otherlog>=30){
+     ot2=true
      this.setState({otherAch2: true});
    }
    if (otherlog>=60){
+     ot3=true
      this.setState({otherAch3: true});
    }
  }
@@ -1079,11 +1474,11 @@ class AchievementScreen extends React.Component{
  setAchievementsOnPress () {
    this.checkJackAch();
    this.checkJournalAch();
-   /*
+   
    this.checkFiveAch();
    this.checkTenAch();
    this.checkBronzeGoldSilverAch();
-   */
+   
  }
 
   static navigationOptions  = {
@@ -1208,7 +1603,7 @@ class AchievementScreen extends React.Component{
 
         <View>
           {this.state.codingAch1==true?
-         <View style={{marginBottom: '100%'}}>
+         <View style={{marginBottom: '93%'}}>
            <MaterialIcons size={51} name='computer' color='#cd7f32' onPress={()=> 
              {Alert.alert(
                "Hello World",
@@ -1220,13 +1615,13 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-         </View>:<View style={{marginBottom: '100%'}}>
+         </View>:<View style={{marginBottom: '93%'}}>
            <MaterialIcons size={51} name='computer' color='#fff' />
          </View>
   }
 
          {this.state.codingAch2==true?
-         <View  style={{marginBottom: '100%'}}>
+         <View  style={{marginBottom: '93%'}}>
            <MaterialIcons size={51} name='computer' color='#c0c0c0' onPress={()=> 
              {Alert.alert(
                "Java The Hutt",
@@ -1238,13 +1633,13 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-         </View>:<View  style={{marginBottom: '100%'}}>
+         </View>:<View  style={{marginBottom: '93%'}}>
            <MaterialIcons size={51} name='computer' color='#fff'/>
          </View>}
 
 
          {this.state.codingAch3==true?
-         <View style={{marginBottom: '100%'}}>
+         <View style={{marginBottom: '93%'}}>
            <MaterialIcons size={51} name='computer' color='#E5BB33' onPress={()=> 
              {Alert.alert(
                "Turing Machine",
@@ -1257,7 +1652,7 @@ class AchievementScreen extends React.Component{
              }
            }/>
          </View>:
-         <View style={{marginBottom: '100%'}}>
+         <View style={{marginBottom: '93%'}}>
            <MaterialIcons size={51} name='computer' color='#fff'/>
          </View>
          }
@@ -1267,7 +1662,7 @@ class AchievementScreen extends React.Component{
      <View>
 
        {this.state.cookingAch1==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <MaterialCommunityIcons size={51} name='chef-hat' color='#cd7f32' onPress={()=> 
              {Alert.alert(
                "Ramen Expert",
@@ -1279,13 +1674,13 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <MaterialCommunityIcons size={51} name='chef-hat' color='#fff'/>
       </View>
   }
 
      {this.state.cookingAch2==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <MaterialCommunityIcons size={51} name='chef-hat' color='#c0c0c0' onPress={()=> 
              {Alert.alert(
                "3-Course Cook",
@@ -1297,13 +1692,13 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <MaterialCommunityIcons size={51} name='chef-hat' color='#fff'/>
       </View>
   }
 
   {this.state.cookingAch3==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <MaterialCommunityIcons size={51} name='chef-hat' color='#e5bb33' onPress={()=> 
              {Alert.alert(
                "Gordon Ramsay",
@@ -1315,7 +1710,7 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <MaterialCommunityIcons size={51} name='chef-hat' color='#fff'/>
       </View>}
       </View>
@@ -1323,7 +1718,7 @@ class AchievementScreen extends React.Component{
      <View>
 
        {this.state.instrumentAch1==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <FontAwesome5 size={51} name='guitar' color='#cd7f32' onPress={()=> 
              {Alert.alert(
                "Hot Cross Buns",
@@ -1335,13 +1730,13 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <FontAwesome5 size={51} name='guitar' color='#fff'/>
       </View>}
 
       {this.state.instrumentAch2==true?
 
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <FontAwesome5 size={51} name='guitar' color='#c0c0c0' onPress={()=> 
              {Alert.alert(
                "Concierto Candidate",
@@ -1353,12 +1748,12 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <FontAwesome5 size={51} name='guitar' color='#fff' />
          </View> }
 
      {this.state.instrumentAch3==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <FontAwesome5 size={51} name='guitar' color='#e5bb33' onPress={()=> 
              {Alert.alert(
                "Mozart",
@@ -1370,7 +1765,7 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <FontAwesome5 size={51} name='guitar' color='#fff'/>
       </View>}
       </View>
@@ -1378,7 +1773,7 @@ class AchievementScreen extends React.Component{
       <View>
 
        {this.state.languageAch1==true?
-      <View  style={{marginBottom: '100%'}}>
+      <View  style={{marginBottom: '93%'}}>
         <Entypo size={51} name='language' color='#cd7f32' onPress={()=> 
              {Alert.alert(
                "¡Muy bien!",
@@ -1391,13 +1786,13 @@ class AchievementScreen extends React.Component{
              }
            }/>
       </View>:
-      <View  style={{marginBottom: '100%'}}>
+      <View  style={{marginBottom: '93%'}}>
       <Entypo size={51} name='language' color='#fff' />
     </View>}
 
 
     {this.state.languageAch2==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <Entypo size={51} name='language' color='#c0c0c0' onPress={()=> 
              {Alert.alert(
                "很好！",
@@ -1409,12 +1804,12 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <Entypo size={51} name='language' color='#fff'/>
       </View>}
 
        {this.state.languageAch3==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <Entypo size={51} name='language' color='#e5bb33' onPress={()=> 
              {Alert.alert(
                "Translator",
@@ -1427,7 +1822,7 @@ class AchievementScreen extends React.Component{
              }
            }/>
       </View>:
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
       <Entypo size={51} name='language' color='#fff'/>
     </View>}
       </View>
@@ -1435,7 +1830,7 @@ class AchievementScreen extends React.Component{
       <View>
 
        {this.state.otherAch1==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <Feather size={51} name='book-open' color='#cd7f32' onPress={()=> 
              {Alert.alert(
                "Above and Beyond",
@@ -1447,13 +1842,13 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <Feather size={51} name='book-open' color='#fff'/>
       </View>}
 
 
        {this.state.otherAch2==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <Feather size={51} name='book-open' color='#c0c0c0' onPress={()=> 
              {Alert.alert(
                "Committed",
@@ -1465,12 +1860,12 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <Feather size={51} name='book-open' color='#fff'/>
       </View>}
 
        {this.state.otherAch3==true?
-      <View style={{marginBottom: '100%'}}>
+      <View style={{marginBottom: '93%'}}>
         <Feather size={51} name='book-open' color='#e5bb33' onPress={()=> 
              {Alert.alert(
                "Ultra-achiever",
@@ -1482,7 +1877,7 @@ class AchievementScreen extends React.Component{
              );
              }
            }/>
-      </View>:<View style={{marginBottom: '100%'}}>
+      </View>:<View style={{marginBottom: '93%'}}>
         <Feather size={51} name='book-open' color='#fff'/>
       </View>}
 
@@ -1573,6 +1968,98 @@ const styles = StyleSheet.create({
 }
 });
 
+class Statsscreen extends React.Component{
+  static navigationOptions  = {
+    title:'Stats'
+  }
+
+  secondsToHoursMinsAndSeconds(x, y){
+    var a = Math.floor(x/3600)
+    var b = (x%3600)
+    var c = Math.floor(b/60)
+    var d = (b%60);
+    if (a==1){
+      var addSHour=" "
+    } else {
+      var addSHour="s "
+    }
+
+    if (c==1){
+      var addSMinute=" "
+    } else {
+      var addSMinute="s "
+    }
+
+    if (d==1){
+      var addSSecond=" "
+    } else {
+      var addSSecond="s"
+    }
+    var result = "You have been practicing "+y+" for "+a+" hour"+addSHour+c+" minute"+addSMinute+ "and "+d+" second"+addSSecond+"."
+    
+    return result;
+  }
+
+  render(){
+    const {navigate} = this.props.navigation;
+    return(
+
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
+
+<View style={{alignItems:'center', justifyContent:'center', marginHorizontal: '5%'}}>
+<Card style={{backgroundColor:'#eff9e7'}}>
+  <CardItem style={{backgroundColor:'#eff9e7'}}>
+<Text  style={{fontSize:18, fontFamily: 'best-font',textAlign: 'justify'}}> {this.secondsToHoursMinsAndSeconds(codelog, "coding")}</Text>
+               </CardItem>
+
+<CardItem style={{backgroundColor:'#eff9e7'}}>
+<Text  style={{fontSize:18, fontFamily: 'best-font',paddingVertical:"2%",textAlign: 'justify'}}> {this.secondsToHoursMinsAndSeconds(cooklog, "cooking")}</Text>
+</CardItem>
+
+<CardItem style={{backgroundColor:'#eff9e7'}}>
+
+<Text  style={{fontSize:18, fontFamily: 'best-font',paddingVertical:"2%",textAlign: 'justify'}}> {this.secondsToHoursMinsAndSeconds(instrumentlog, "playing an instrument")}</Text>
+</CardItem>
+
+<CardItem style={{backgroundColor:'#eff9e7'}}>
+<Text  style={{fontSize:18, fontFamily: 'best-font',paddingVertical:"2%",textAlign: 'justify'}}> {this.secondsToHoursMinsAndSeconds(languagelog, "learning a language")}</Text>
+</CardItem>
+
+<CardItem style={{backgroundColor:'#eff9e7'}}>
+<Text  style={{fontSize:18, fontFamily: 'best-font',paddingVertical:"2%",textAlign: 'justify'}}> {this.secondsToHoursMinsAndSeconds(otherlog, "other activities")}</Text>
+
+  </CardItem>
+</Card>
+</View>
+
+<View style={{alignItems:'center', justifyContent:'center', flexDirection:'row'}}>
+  <Card style={{backgroundColor:'#eff9e7', marginRight:'3%'}}>
+    <CardItem style={{backgroundColor:'#eff9e7'}}>
+      <Text style={{fontSize:16, fontFamily:'best-font'}}>
+        Keep up the good work!
+      </Text>
+    </CardItem>
+  </Card>
+  <AdvButton text='Return' onPress={() => {navigate('Next');}}/>
+</View>
+</View>
+
+
+    );
+  }
+}
+
+
 const CustomDrawerComponent = (props) => (
   <SafeAreaView style={{flex: 1, backgroundColor: '#eff9e7'}}>
     <View style={{height:150, backgroundColor: '#eff9e7', alignItems:'center', justifyContent: 'center'}}>
@@ -1596,7 +2083,11 @@ const DrawerNavigator = createDrawerNavigator({
   },
   Logbook:{
     screen:Logbook
-  }
+  },
+  Statslol:{
+    screen:Statsscreen
+  },
+
 
 }, {
   contentComponent: CustomDrawerComponent,
@@ -1638,7 +2129,10 @@ Coding:
   },
   MoreActivities: {
     screen: DrawerNavigator
-  }
+  },
+  Statslol:{
+    screen:DrawerNavigator
+  },
 
 
 
@@ -1973,6 +2467,235 @@ class MoreActivitiesThanInitiallyScreen extends React.Component{
     );
     }
 }
+
+
+
+
+
+
+
+
+
+
+ class CodingScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+             min: 0,
+             sec: 0,
+             msec: 0
+         }
+  }
+  static navigationOptions  = {
+    title:'Coding'
+  }
+  handleToggle = () => {
+        this.setState(
+            {
+                start: !this.state.start
+            },
+            () => this.handleStart()
+        );
+    };
+
+
+    handleStart = () => {
+        if (this.state.start) {
+            this.interval = setInterval(() => {
+                if (this.state.msec !== 100) {
+                    this.setState({
+                        msec: this.state.msec + 2
+                    });
+                } else if (this.state.sec !== 59) {
+                    this.setState({
+                        msec: 0,
+                        sec: ++this.state.sec
+                    });
+                } else {
+                    this.setState({
+                        msec: 0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+            }, 1);
+
+        } else {
+            clearInterval(this.interval);
+        }
+    };
+
+    handleReset = () => {
+      if(this.state.sec >0){
+        Alert.alert("Thanks for practicing!",
+          'you have been practicing for ' + this.state.sec + ' ' + 'seconds')
+        this.setState({
+            min: 0,
+            sec: 0,
+            msec: 0,
+
+            start: false
+        });
+        clearInterval(this.interval);
+}
+    };
+
+  render() {
+    const {navigate} = this.props.navigation;
+
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <StatusBar hidden/>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
+      <WebView
+        style={{height: "22.5%", width: 225, marginVertical: "70%", bottom:"12%" }}
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+
+        domStorageEnabled={true}
+        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
+
+      />
+      <Button
+      style = {{top:"-180%"}}
+      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      onPress = {this.handleToggle
+      }
+      />
+      <Button
+      style = {{top:"-100%",bottom:"15%"}}
+      title = {'Stop and Log'}
+      onPress = {this.handleReset
+      }
+      />
+
+
+
+      </View>
+    );
+    }
+
+
+  }
+
+class CookingScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Cooking'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <StatusBar hidden/>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
+      <Text onPress={() => navigate('Home')}>This is cooking...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class InstrumentScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Instrument'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <StatusBar hidden/>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
+      <Text onPress={() => navigate('Home')}>This is instrument...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class LanguageScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Language'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <StatusBar hidden/>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
+      <Text onPress={() => navigate('Home')}>This is learning a language screen...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+class OtherScreen extends React.Component{
+  static navigationOptions  = {
+    title:'Other'
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <StatusBar hidden/>
+      <LinearGradient
+      colors = {['#fff','#95d65e']}
+      style={{
+                 position: 'absolute',
+                 left: 0,
+                 right: 0,
+                 top: 0,
+                 height: "100%",
+               }}
+      />
+      <Text onPress={() => navigate('Home')}>This is other screen...Return To Home Screen</Text>
+
+      </View>
+    );
+    }
+
+}
+
+
 
   */
 
