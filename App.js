@@ -1281,7 +1281,7 @@ class LanguageScreen extends React.Component{
     handleReset = () => {
       if(this.state.sec >=0){
         reset=true;
-        otherlog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        language+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
         console.log(codelog)
         Alert.alert("Well done!",
           'You practiced for ' + this.state.hour  + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds.')
@@ -1429,7 +1429,7 @@ class OtherScreen extends React.Component{
     handleReset = () => {
       if(this.state.sec >=0){
         reset=true;
-        languagelog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        otherlog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
         console.log(codelog)
         Alert.alert("Well done!",
           'You practiced for ' + this.state.hour  + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
