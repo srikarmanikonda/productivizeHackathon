@@ -13,6 +13,11 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import * as AddCalendarEvent from 'react-native-add-calendar-event';
+import RNCalendarEvents from 'react-native-calendar-events'
+import * as Permissions from 'expo-permissions';
+import * as Calendar from 'expo-calendar';
+import {CalendarList, Agenda,calendarTheme} from 'react-native-calendars'
 
 //nothing is global!!!! so make variables
 //same "principles" often apply...
@@ -79,6 +84,14 @@ var inst3=false;
 var ot1=false;
 var ot2=false;
 var ot3=false;
+
+var reset=true;
+
+var goal;
+
+var dates = ['2020-05-21','2020-05-07','2020-05-15']
+var setit;
+var calendartypebeat;
 
 
 let customFonts = {
@@ -267,6 +280,9 @@ class HomeScreen extends React.Component {
            }
           }
         }}/>
+        <View style={{marginBottom:'1%'}}>
+
+        </View>
         </View>
     );
     } else {
@@ -525,7 +541,8 @@ class SecondScreen extends React.Component {
             navigate('Language')
           }
 
-          if (value==usersChoice){
+          if (value==usersChoice||value==usersChoice2||value==usersChoice3){
+            console.log("GOING TO OTHER")
             navigate('Other')
           }
 
@@ -534,11 +551,12 @@ class SecondScreen extends React.Component {
 
         }}>
 
-    
-          <MenuTrigger onPress={this.setStatesOnPress} style={{marginTop:'-3%'}}>
-          <View style={{alignItems: 'center', flexDirection:'row',}}>
+        
+          <MenuTrigger onPress={this.setStatesOnPress} style={{marginTop:'-3%', alignItems:'center'}}>
+          <View style={{ flexDirection:'row', alignItems:'center', marginRight:'11%'}}>
+          <Feather name='menu' size={24.999999} onPress={()=> this.props.navigation.openDrawer()} style={{ marginRight:'11%'}}/>
+          
 
-          <Feather name='menu' size={24.999999} onPress={()=> this.props.navigation.openDrawer()} style={{marginRight: '8%', }}/>
             <View style={{alignItems:'center'}}>
             <Card
               style={{
@@ -557,6 +575,7 @@ class SecondScreen extends React.Component {
             </View>
             </View>
           </MenuTrigger>
+    
           
           <View style={{marginTop:'10%',}}>
               <Text style={{fontFamily:'best-font', textAlign:'center'}}>
@@ -719,12 +738,12 @@ class SecondScreen extends React.Component {
             </MenuOption>: null}
 
             {this.state["other2"] == true ?
-            <MenuOption value={usersChoice}>
+            <MenuOption value={usersChoice2}>
               <Text style={styles.menuContent}>{usersChoice2}</Text>
             </MenuOption>: null}
 
             {this.state["other3"] == true ?
-            <MenuOption value={usersChoice}>
+            <MenuOption value={usersChoice3}>
               <Text style={styles.menuContent}>{usersChoice3}</Text>
             </MenuOption>: null}
 
@@ -745,13 +764,15 @@ class CodingScreen extends React.Component{
              hour:0,
              min: 0,
              sec: 0,
-             msec: 0
+             msec: 0,
+             text: ''
          }
   }
   static navigationOptions  = {
     title:'Coding'
   }
   handleToggle = () => {
+    reset=false;
         this.setState(
             {
                 start: !this.state.start
@@ -800,10 +821,11 @@ class CodingScreen extends React.Component{
 
     handleReset = () => {
       if(this.state.sec >=0){
+        reset=true;
         codelog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
         console.log(codelog)
-        Alert.alert("Thanks for practicing!",
-          'you have been practicing for ' + this.state.hour + ' hours  ' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        Alert.alert("Well done!",
+          'You practiced for ' + this.state.hour + ' hours ' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds.')
         this.setState({
             min: 0,
             sec: 0,
@@ -819,6 +841,7 @@ class CodingScreen extends React.Component{
     const {navigate} = this.props.navigation;
 
     return (
+
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <LinearGradient
       colors = {['#fff','#95d65e']}
@@ -830,37 +853,60 @@ class CodingScreen extends React.Component{
                  height: "100%",
                }}
       />
+      <StatusBar hidden/>
+              
+      <View style={{marginTop:'5%'}}>
+
+      </View>
+      <TextInput style={{borderWidth: 1, borderColor: '#aaa', paddingHorizontal: 8 , width:300, fontSize:14., fontFamily: 'best-font',}}
+            placeholder= {'Set a time goal for yourself (e.g. 1 hour)...'} onChangeText={text=>this.setState({text})}/>
+
       <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
 
-        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
-          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning coding, one of the most revolutionary hobbies in the world that combines technology and critical thinking!</Text>
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"0%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Congratulations on taking up (or continuing) coding. This is a very fun and helpful activity that can truly unlock your brainpower. Here is a resource that can help you get started if you're new. You can do it!</Text>
         </CardItem>
         </Card>
 
       <WebView
-        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        style={{height: "24.5%", width: 250, marginVertical: "20%",bottom:"0%" }}
         javaScriptEnabled={true}
-        startInLoadingState={true}
+        startInLoadingState={false}
 
         domStorageEnabled={true}
-        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
+        source={{ uri: 'https://www.youtube.com/embed/NWIkWv66yAU' }}
 
       />
-      <Button onPress={()=>{navigate('Next')}}/>
-      <Button
+      <AdvButton
+      style = {{top:"-200%",backgroundColor:'#fff'}}
+      iconName = 'home'
+      text = {'Return to Home'}
+      onPress = {()=>{
+        if (reset==true){
+          navigate('Next')
+        }
+      }}
+      />
+      <View style={{marginBottom:'1%'}}></View>
+
+      <AdvButton
       style = {{top:"-150%",backgroundColor:'#74b53d'}}
-      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      text = {!this.state.start? 'Start Time For Activity': 'Pause Time'}
       onPress = {this.handleToggle
       }
       />
-      <Button
-      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+      <View style={{marginBottom:'1%'}}>
+      </View>
+      <AdvButton
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d', marginBottom:'10%'}}
 
-      title = {'Stop and Log'}
+      text = {'Stop and Log'}
       onPress = {this.handleReset
       }
       />
+<View style={{marginBottom:'6%'}}>
 
+</View>
 
 
       </View>
@@ -884,6 +930,7 @@ class CookingScreen extends React.Component{
     title:'Cooking'
   }
   handleToggle = () => {
+    reset=false;
         this.setState(
             {
                 start: !this.state.start
@@ -932,10 +979,11 @@ class CookingScreen extends React.Component{
 
     handleReset = () => {
       if(this.state.sec >=0){
+        reset=true;
         cooklog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
         console.log(codelog)
-        Alert.alert("Thanks for practicing!",
-          'you have been practicing for ' + this.state.hour + " " + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        Alert.alert("Well done!",
+          'You practiced for ' + this.state.hour + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds.')
         this.setState({
             min: 0,
             sec: 0,
@@ -960,36 +1008,59 @@ class CookingScreen extends React.Component{
                  height: "100%",
                }}
       />
+      <StatusBar hidden/>
+
+      <View style={{marginTop:'5%'}}>
+
+      </View>
+      <TextInput style={{borderWidth: 1, borderColor: '#aaa', paddingHorizontal: 8 , width:300, fontSize:14., fontFamily: 'best-font',}}
+            placeholder= {'Set a time goal for yourself (e.g. 1 hour)...'} onChangeText={text=>this.setState({text})}/>
+
       <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
 
-        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
-          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning cooking and become a food conniseur!</Text>
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"0%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Congratulations on taking up (or continuing) cooking. From PB and J sandwiches to scallop sashimi, unleash your inner chef in learning cooking. Here is a resource that can help you get started if you're new. You can do it!</Text>
         </CardItem>
         </Card>
 
       <WebView
-        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        style={{height: 215, width: 250, marginVertical: "20%", bottom:"0%" }}
         javaScriptEnabled={true}
-        startInLoadingState={true}
+        startInLoadingState={false}
 
         domStorageEnabled={true}
         source={{ uri: 'https://www.youtube.com/embed/9_5wHw6l11o' }}
 
       />
-      <Button
+      <AdvButton
+      style = {{top:"-200%",backgroundColor:'#fff'}}
+      iconName = 'home'
+      text = {'Return to Home'}
+      onPress = {()=>{
+        if (reset==true){
+          navigate('Next')
+        }
+      }}
+      />
+      <View style={{marginBottom:'1%'}}></View>
+
+      <AdvButton
       style = {{top:"-150%",backgroundColor:'#74b53d'}}
-      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      text = {!this.state.start? 'Start Time For Activity': 'Pause Time'}
       onPress = {this.handleToggle
       }
       />
-      <Button
-      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+      <View style={{marginBottom:'1%'}}></View>
+  
+      <AdvButton
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d', marginBottom:'10%'}}
 
-      title = {'Stop and Log'}
+      text = {'Stop and Log'}
       onPress = {this.handleReset
       }
       />
-
+<View style={{marginBottom:'6%'}}>
+</View>
 
       </View>
     );
@@ -1011,6 +1082,7 @@ class InstrumentScreen extends React.Component{
     title:'Instrument'
   }
   handleToggle = () => {
+    reset=false;
         this.setState(
             {
                 start: !this.state.start
@@ -1059,10 +1131,11 @@ class InstrumentScreen extends React.Component{
 
     handleReset = () => {
       if(this.state.sec >=0){
-        cooklog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        reset=true;
+        instrumentlog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
         console.log(codelog)
-        Alert.alert("Thanks for practicing!",
-          'you have been practicing for ' + this.state.hour + " " + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        Alert.alert("Well done!",
+          'You practiced for ' + this.state.hour  + ' hours ' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds.')
         this.setState({
             min: 0,
             sec: 0,
@@ -1087,36 +1160,56 @@ class InstrumentScreen extends React.Component{
                  height: "100%",
                }}
       />
+      <StatusBar hidden/>
+
+      <View style={{marginTop:'5%'}}>
+
+      </View>
+      <TextInput style={{borderWidth: 1, borderColor: '#aaa', paddingHorizontal: 8 , width:300, fontSize:14., fontFamily: 'best-font',}}
+            placeholder= {'Set a time goal for yourself (e.g. 1 hour)...'} onChangeText={text=>this.setState({text})}/>
       <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
 
-        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
-          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning a new instrument and become the next Yo-Yo Ma or Louis armstrong!</Text>
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"0%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Congratulations on taking up (or continuing) playing an instrument. From the tambourine to the trombone, there are countless instruments that you can play to thoroughly enjoy the passion and art it takes to learn and make music. Here is a resource that can help you get started if you're new. You can do it!</Text>
         </CardItem>
         </Card>
 
       <WebView
-        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        style={{height: "24.5%", width: 250, marginVertical: "15%", bottom:"0%" }}
         javaScriptEnabled={true}
-        startInLoadingState={true}
+        startInLoadingState={false}
 
         domStorageEnabled={true}
         source={{ uri: 'https://www.youtube.com/embed/qZIeVsnTDmI' }}
 
       />
-      <Button
+      <AdvButton
+      style = {{top:"-200%",backgroundColor:'#fff'}}
+      iconName = 'home'
+      text = {'Return to Home'}
+      onPress = {()=>{
+        if (reset==true){
+          navigate('Next')
+        }
+      }}
+      />
+      <View style={{marginBottom:'1%'}}></View>
+      <AdvButton
       style = {{top:"-150%",backgroundColor:'#74b53d'}}
-      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      text = {!this.state.start? 'Start Time For Activity': 'Pause Time'}
       onPress = {this.handleToggle
       }
       />
-      <Button
-      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+      <View style={{marginBottom:'1%'}}></View>
+      <AdvButton
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d', marginBottom:'10%'}}
 
-      title = {'Stop and Log'}
+      text = {'Stop and Log'}
       onPress = {this.handleReset
       }
       />
-
+<View style={{marginBottom:'6%'}}>
+</View>
 
       </View>
     );
@@ -1138,6 +1231,7 @@ class LanguageScreen extends React.Component{
     title:'Language'
   }
   handleToggle = () => {
+    reset=false;
         this.setState(
             {
                 start: !this.state.start
@@ -1186,10 +1280,11 @@ class LanguageScreen extends React.Component{
 
     handleReset = () => {
       if(this.state.sec >=0){
-        cooklog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        reset=true;
+        otherlog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
         console.log(codelog)
-        Alert.alert("Thanks for practicing!",
-          'you have been practicing for ' + this.state.hour + " " + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        Alert.alert("Well done!",
+          'You practiced for ' + this.state.hour  + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds.')
         this.setState({
             min: 0,
             sec: 0,
@@ -1214,36 +1309,55 @@ class LanguageScreen extends React.Component{
                  height: "100%",
                }}
       />
+      <StatusBar hidden/>
+      <View style={{marginTop:'5%'}}>
+
+      </View>
+      <TextInput style={{borderWidth: 1, borderColor: '#aaa', paddingHorizontal: 8 , width:300, fontSize:14., fontFamily: 'best-font',}}
+            placeholder= {'Set a time goal for yourself (e.g. 1 hour)...'} onChangeText={text=>this.setState({text})}/>           
       <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
 
-        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
-          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning a new language, from Spanish, to Mandarin there are plenty of great resources out there!</Text>
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"0%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Congratulations on taking up (or continuing) learning a language. Enhance your worldview and global perspectives by learning languages, the fundamental connection point to humans across the world. Here is a resource that can help you get started if you're new. You can do it!</Text>
         </CardItem>
         </Card>
 
       <WebView
-        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        style={{height: "24.5%", width: 250, marginVertical: "17%", bottom:"0%" }}
         javaScriptEnabled={true}
-        startInLoadingState={true}
+        startInLoadingState={false}
 
         domStorageEnabled={true}
         source={{ uri: 'https://www.youtube.com/embed/CNbklPRdT4Y' }}
 
       />
-      <Button
+      <AdvButton
+      style = {{top:"-200%",backgroundColor:'#fff'}}
+      iconName = 'home'
+      text = {'Return to Home'}
+      onPress = {()=>{
+        if (reset==true){
+          navigate('Next')
+        }
+      }}
+      />
+      <View style={{marginBottom:'1%'}}></View>
+      <AdvButton
       style = {{top:"-150%",backgroundColor:'#74b53d'}}
-      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      text = {!this.state.start? 'Start Time For Activity': 'Pause Time'}
       onPress = {this.handleToggle
       }
       />
-      <Button
-      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+      <View style={{marginBottom:'1%'}}></View>
+      <AdvButton
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d', marginBottom:'10%'}}
 
-      title = {'Stop and Log'}
+      text = {'Stop and Log'}
       onPress = {this.handleReset
       }
       />
-
+<View style={{marginBottom:'6%'}}>
+</View>
 
       </View>
     );
@@ -1252,9 +1366,83 @@ class LanguageScreen extends React.Component{
 }
 
 class OtherScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+             hour:0,
+             min: 0,
+             sec: 0,
+             msec: 0
+         }
+  }
   static navigationOptions  = {
     title:'Other'
   }
+  handleToggle = () => {
+    reset=false;
+        this.setState(
+            {
+                start: !this.state.start
+            },
+            () => this.handleStart()
+        );
+    };
+
+
+    handleStart = () => {
+        if (this.state.start) {
+            this.interval = setInterval(() => {
+                if (this.state.msec !== 100) {
+                    this.setState({
+                        msec: this.state.msec + 2
+                    });
+                } else if (this.state.sec !== 59) {
+                    this.setState({
+                        msec: 0,
+                        sec: ++this.state.sec
+                    });
+                }
+
+                else if (this.state.min !== 59) {
+                    this.setState({
+                        msec:0,
+                        sec: 0,
+                        min: ++this.state.min
+                    });
+                }
+
+                 else {
+                    this.setState({
+                        msec: 0,
+                        sec: 0,
+                        min:0,
+                        hour: ++this.state.hour
+                    });
+                }
+            }, 1);
+
+        } else {
+            clearInterval(this.interval);
+        }
+    };
+
+    handleReset = () => {
+      if(this.state.sec >=0){
+        reset=true;
+        languagelog+= this.state.sec + (this.state.min*60) +(this.state.hour*3600)
+        console.log(codelog)
+        Alert.alert("Well done!",
+          'You practiced for ' + this.state.hour  + ' hours' + this.state.min + ' minutes and '  + this.state.sec + ' ' + 'seconds')
+        this.setState({
+            min: 0,
+            sec: 0,
+            msec: 0,
+
+            start: false
+        });
+        clearInterval(this.interval);
+}
+    };
   render() {
     const {navigate} = this.props.navigation;
     return (
@@ -1269,44 +1457,62 @@ class OtherScreen extends React.Component{
                  height: "100%",
                }}
       />
+      <StatusBar hidden/>
+      <View style={{marginTop:'5%'}}>
+
+      </View>
+      <TextInput style={{borderWidth: 1, borderColor: '#aaa', paddingHorizontal: 8 , width:300, fontSize:14., fontFamily: 'best-font',}}
+            placeholder= {'Set a time goal for yourself (e.g. 1 hour)...'} onChangeText={text=>this.setState({text})}/>
       <Card style={{backgroundColor: '#eff9e7',bottom:"-5%"}}>
 
-        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"4%"}}>
-          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Welcome! Feel free to spend some time learning a hobby you shared, one of the most revolutionary hobbies in the world that combines technology and critical thinking!</Text>
+        <CardItem header style={{width: "75%", backgroundColor: '#eff9e7',marginVertical:"0%"}}>
+          <Text style={{fontSize:14, fontFamily: 'best-font',}}>Congratulations on taking up (or continuing) another activity that you selected. Whatever it may be, stick with it and keep your goals and passions in mind. If you need some more ideas, here is a resource that may be helpful! You can do it!</Text>
         </CardItem>
         </Card>
 
       <WebView
-        style={{height: "24.5%", width: 225, marginVertical: "50%", bottom:"12%" }}
+        style={{height: "24.5%", width: 250, marginVertical: "17%", bottom:"0%" }}
         javaScriptEnabled={true}
-        startInLoadingState={true}
+        startInLoadingState={false}
 
         domStorageEnabled={true}
-        source={{ uri: 'https://www.youtube.com/embed/cKhVupvyhKk' }}
+        source={{ uri: 'https://www.youtube.com/embed/70keNWrYpW4'}}
 
       />
-      <Button
+      <AdvButton
+      style = {{top:"-200%",backgroundColor:'#fff'}}
+      iconName = 'home'
+      text = {'Return to Home'}
+      onPress = {()=>{
+        if (reset==true){
+          navigate('Next')
+        }
+      }}
+      />
+      <View style={{marginBottom:'1%'}}></View>
+
+      <AdvButton
       style = {{top:"-150%",backgroundColor:'#74b53d'}}
-      title = {!this.state.start? 'Start time': 'Pause Activity'}
+      text = {!this.state.start? 'Start Time For Activity': 'Pause Time'}
       onPress = {this.handleToggle
       }
       />
-      <Button
-      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d'}}
+      <View style={{marginBottom:'1%'}}></View>
+      <AdvButton
+      style = {{top:"-100%",bottom:"15%",backgroundColor:'#74b53d', marginBottom:'10%'}}
 
-      title = {'Stop and Log'}
+      text = {'Stop and Log'}
       onPress = {this.handleReset
       }
       />
-
+<View style={{marginBottom:'6%'}}>
+</View>
 
       </View>
     );
     }
 
 }
-
-
 
 class AchievementScreen extends React.Component{
 
@@ -1522,7 +1728,7 @@ class AchievementScreen extends React.Component{
        </View>
 
 
-     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:'8%'}}>
+     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:'5%'}}>
 
      {this.state.jackOfAllTradesAch==true?
      <View style={{marginRight:'5%'}}>
@@ -1563,9 +1769,9 @@ class AchievementScreen extends React.Component{
      </View>}
 
 
-       {this.state.fiveUnlockedAch==true?
+     {this.state.fiveUnlockedAch==true?
       <View style={{marginRight:'1%'}}>
-        <MaterialCommunityIcons size={67} name='dice-5' color='#73c332' onPress={()=> 
+        <MaterialCommunityIcons size={75} name='dice-5' color='#73c332' onPress={()=> 
              {Alert.alert(
                "5 Stars",
                "Unlocked 5 achievements!",
@@ -1577,12 +1783,12 @@ class AchievementScreen extends React.Component{
              }
            }/>
       </View>:<View style={{marginRight:'1%'}}>
-        <MaterialCommunityIcons size={67} name='dice-5' color='#fff'/>
+        <MaterialCommunityIcons size={75} name='dice-5' color='#fff'/>
       </View>}
 
-         {this.state.tenUnlockedAch==true?
+      {this.state.tenUnlockedAch==true?
       <View style={{}}>
-        <MaterialCommunityIcons size={67} name='dice-d10' color='#73c332' onPress={()=> 
+        <MaterialCommunityIcons size={75} name='dice-d10' color='#73c332' onPress={()=> 
              {Alert.alert(
                "Alexander Hamilton",
                "Unlocked 10 achievements!",
@@ -1594,12 +1800,12 @@ class AchievementScreen extends React.Component{
              }
            }/>
       </View>:<View style={{}}>
-        <MaterialCommunityIcons size={67} name='dice-d10' color='#fff'/>
+        <MaterialCommunityIcons size={75} name='dice-d10' color='#fff'/>
       </View>}
 
       </View>
 
-       <View style={{marginRight: '0.8%', marginLeft: '0.8%', flexDirection:'row', alignItems:'center', justifyContent: 'space-around', marginTop: '14.75%'}}>
+       <View style={{marginRight: '0.8%', marginLeft: '0.8%', flexDirection:'row', alignItems:'center', justifyContent: 'space-around', marginTop: '14.25%'}}>
 
         <View>
           {this.state.codingAch1==true?
@@ -1923,23 +2129,22 @@ class AchievementScreen extends React.Component{
          <View style = {{width:"90%",
          backgroundColor:"#fff",
          borderRadius:25,
-         height:"85%",
-         marginBottom:"10%",
+         marginBottom:'5%',
          justifyContent:"center",
          padding:20,
          top:"1%"}}>
 
         <TextInput
-            style={{ height:50,
+            style={{ height:'99%',
            color:"black",
-           top:"-49%"}}
+           top:"-47%", paddingVertical:'0.8%'}}
             placeholder = "Begin writing about your experiences here..."
             placeholderTextColor="silver"
             onChangeText={writer=>this.setState({writer})}
 
        />
-
-       <AdvButton text="Save!" onPress={() => {
+      <View style={{marginLeft:'40.5%', marginRight: '40.5%', marginBottom:'-0%'}}>
+       <AdvButton text="Save!" onPress={()=>{
          this.setVarToWriterState();
          console.log("Written: "+ whatsWrittenInJournal);
          if (whatsWrittenInJournal!=''){
@@ -1950,6 +2155,7 @@ class AchievementScreen extends React.Component{
         }}
 
          />
+         </View>
 
         </View>
         </View>
@@ -2087,6 +2293,7 @@ const DrawerNavigator = createDrawerNavigator({
   Statslol:{
     screen:Statsscreen
   },
+  
 
 
 }, {
@@ -2134,8 +2341,127 @@ Coding:
     screen:DrawerNavigator
   },
 
-
-
 });
 
 export default createAppContainer(AppNavigator);
+
+/*
+     <MenuProvider style={{ padding: 30}}>
+        <Menu 
+        
+        onSelect={value => {
+
+          if (value=='15 Minutes'){
+            this.setState({
+              text: '15 Minutes'
+            })
+          }
+
+          if (value=='30 Minutes'){
+            this.setState({
+              text: '30 Minutes'
+            })
+          }
+
+          if (value=='45 Minutes'){
+            this.setState({
+              text: '45 Minutes'
+            })
+          }
+
+          if (value=='1 Hour'){
+            this.setState({
+              text: '1 Hour'
+            })
+          }
+
+          if (value=='1 Hour and 30 Minutes'){
+            this.setState({
+              text: '1 Hour and 30 Minutes'
+            })
+          }
+
+          if (value=='2 Hours'){
+            this.setState({
+              text: '2 Hours'
+            })
+          }
+
+          if (value=='3 Hours'){
+            this.setState({
+              text: '3 Hours'
+            })
+          }
+
+         
+
+        }}>
+
+        
+          <MenuTrigger style={{marginTop:'-3%', alignItems:'center' }}>
+          <View style={{ flexDirection:'row', alignItems:'center', marginRight:'11%'}}>
+          
+
+            <View style={{alignItems:'center'}}>
+            <Card
+              style={{
+              width: 200,
+              paddingHorizontal: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: '#f3faed'
+              }}>
+
+                <Text style={styles.headerText}>{this.state.text}</Text>
+                <AntDesign name='downcircleo' size={16} />
+
+            </Card>
+            </View>
+            </View>
+          </MenuTrigger>
+
+
+
+
+
+          <MenuOptions>
+            <MenuOption value={"15 Minutes"}>
+              <Text style={styles.menuContent}>15 Minutes</Text>
+            </MenuOption>
+
+            
+            <MenuOption value={"30 Minutes"}>
+              <Text style={styles.menuContent}>30 Minutes</Text>
+            </MenuOption>
+
+            
+            <MenuOption value={"45 Minutes"}>
+              <Text style={styles.menuContent}>45 Minutes</Text>
+            </MenuOption>
+
+            
+            <MenuOption value={"1 Hour"}>
+              <Text style={styles.menuContent}>1 Hour</Text>
+            </MenuOption>
+
+            
+            <MenuOption value={"1 Hour and 30 Minutes"}>
+              <Text style={styles.menuContent}>1 Hour and 30 Minutes</Text>
+            </MenuOption>
+
+            
+            <MenuOption value={"2 Hours"}>
+              <Text style={styles.menuContent}>2 Hours</Text>
+            </MenuOption>
+
+            
+            <MenuOption value={"3 Hours"}>
+              <Text style={styles.menuContent}>3 Hours</Text>
+            </MenuOption>
+
+          </MenuOptions>
+
+        </Menu>
+      </MenuProvider>
+*/
