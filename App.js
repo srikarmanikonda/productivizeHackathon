@@ -13,8 +13,6 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Col, Row, Grid } from "react-native-easy-grid";
-import * as AddCalendarEvent from 'react-native-add-calendar-event';
-import RNCalendarEvents from 'react-native-calendar-events'
 import * as Permissions from 'expo-permissions';
 import * as Calendar from 'expo-calendar';
 import {CalendarList, Agenda,calendarTheme} from 'react-native-calendars'
